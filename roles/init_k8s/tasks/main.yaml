@@ -13,7 +13,7 @@
 - name: Initialize Kubernetes master
   when: init_master == 'true'
   command:
-    cmd: kubeadm init --pod-network-cidr=192.168.0.0/16 --control-plane-endpoint "{{ hostvars['haproxy']['ansible_host'] }}":6443 --upload-certs --v=5
+    cmd: kubeadm init --pod-network-cidr=192.168.0.0/16 --control-plane-endpoint control.oblivionone.com:6443 --upload-certs --v=5
   register: kubeadm_init_result
   changed_when: "'Your Kubernetes control-plane has initialized successfully!' not in kubeadm_init_result.stdout"
 
