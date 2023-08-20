@@ -1,0 +1,28 @@
+
+defaults
+        log global
+        timeout connect 500000
+        timeout client 2400000
+        timeout server 2400000
+
+frontend apiservers
+        bind *:6443
+        mode tcp
+        option tcplog
+        default_backend k8s_apiservers
+
+backend k8s_apiservers
+        mode tcp
+        log global
+        balance roundrobin
+        option tcp-check
+        option log-health-checks
+        option ssl-hello-chk
+        option log-health-checks
+        default-server inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100
+{% for host in groups['all'] %}
+{% if hostvars[host]['mode'] == 'master' %}
+        server {{ host }} {{ hostvars[host]['ansible_host'] }}:6443 check
+
+{% endif %}
+{% endfor %}

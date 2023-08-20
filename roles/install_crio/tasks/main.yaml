@@ -1,0 +1,59 @@
+---
+- name: create keyring directory
+  file:
+    path: /etc/apt/trusted.gpg.d/
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+#- name: Add opensuse gpg keys to apt
+ # get_url:
+ #   url: "{{ item.url }}"
+    #dest: "{{ item.keyring }}"
+ # with_items:
+   # - { url: 'https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:1.24/xUbuntu_22.04/Release.key', keyring: '/etc/apt/trusted.gpg.d/libcontainers-1.gpg'  }
+   # - { url: 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_22.04/Release.key', keyring: '/etc/apt/trusted.gpg.d/libcontainers-2.gpg' }
+
+- name: Add opensuse gpg keys to apt
+  apt_key:
+      url: "{{ item.url }}"
+      keyring: "{{ item.keyring }}"
+  with_items:
+    - { url: 'https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:1.24/xUbuntu_22.04/Release.key', keyring: '/etc/apt/trusted.gpg.d/libcontainers-1.gpg'  }
+    - { url: 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_22.04/Release.key', keyring: '/etc/apt/trusted.gpg.d/libcontainers-2.gpg' }
+
+
+- name: Add opensuse repos
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - 'deb [signed-by=/etc/apt/trusted.gpg.d/libcontainers-1.gpg] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_22.04/ /'
+    - 'deb [signed-by=/etc/apt/trusted.gpg.d/libcontainers-2.gpg] http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/1.24/xUbuntu_22.04/ /'
+
+
+
+
+- name: Update apt repos
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install cri-o
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - 'cri-o'
+    - 'cri-o-runc'
+    - 'cri-tools'
+  when: "'haproxy' not in mode"
+
+- name: enable crio
+  systemd:
+    daemon_reload: yes
+    name: crio
+    state: started
+    enabled: yes
+  when: "'haproxy' not in mode"

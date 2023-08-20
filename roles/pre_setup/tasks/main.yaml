@@ -1,0 +1,61 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+
+- name: update and upgrade system
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+
+
+- name: install some base packages
+  apt:
+    pkg:
+      - net-tools
+      - xz-utils
+      - bmon
+      - curl
+      - tcpdump
+      - vim
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - resolvconf
+      - python3-pip
+    state: present
+
+
+
+- name: set resolve conf config
+  copy:
+    dest: /etc/resolvconf/resolv.conf.d/head
+    content: |
+      nameserver 8.8.8.8
+
+
+- name: edit resolv.conf file
+  copy:
+    dest: /etc/resolv.
+    content: |
+      nameserver 8.8.8.8
+
+
+
+- name: enable resolvconf service
+  systemd:
+    name: resolvconf
+    state: started
+    enabled: yes
+
+
+- name: Install k8s py module
+  pip:
+    name: kubernetes
+    state: present
+
+
+

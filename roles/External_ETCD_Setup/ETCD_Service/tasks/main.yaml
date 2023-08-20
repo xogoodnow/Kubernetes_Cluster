@@ -1,0 +1,27 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: Create the service file for ETCD
+  copy:
+    src: files/etcd.service
+    dest: /etc/systemd/system/etcd.service
+    owner: root
+    group: root
+    mode: 0744
+
+
+- name: Reload the systemd daemon
+  systemd:
+    daemon_reload: true
+
+
+- name: Enable and start the service
+  systemd:
+    name: etcd.service
+    state: started
+    enabled: true
+
+

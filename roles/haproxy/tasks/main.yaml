@@ -1,0 +1,100 @@
+---
+- name: install required packages
+  apt:
+    pkg:
+    - curl
+    - gnupg
+    - ca-certificates
+    state: present
+
+- name: create keyring direcrtory
+  file:
+    path: /etc/apt/keyrings
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+
+
+- name: add docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    keyring: /etc/apt/keyrings/docker.gpg
+
+
+
+- name: add the repository
+
+  apt_repository:
+    repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu   jammy stable
+    state: present
+
+
+
+- name: update repository
+  apt:
+    update_cache: yes
+
+
+- name: install docker
+  apt:
+    pkg:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
+    - python3-pip
+
+
+- name: install dockerpy
+  pip:
+    name: docker
+
+
+
+- name: pull haproxy latest image
+  docker_image:
+    name: haproxy:latest
+    source: pull
+
+
+- name: create a directory for haproxy config
+  file:
+    path: /root/haproxy/
+    owner: root
+    group: root
+    mode: "0755"
+    state: directory
+
+
+
+
+- name: craete the haproxy.cfg file from template
+  template:
+    dest: /root/haproxy/haproxy.cfg
+    src: templates/haproxy.cfg.j2
+  notify:
+  - restart haproxy container
+
+
+
+
+- name: run the haproxy container
+  docker_container:
+    name: haproxy
+    image: haproxy:latest
+    state: started
+    restart_policy: always
+    ports:
+      - '6443:6443'
+    volumes:
+      - /root/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+
+
+
+
+
+

@@ -1,0 +1,49 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Create a directory for ETCD binaries
+  file:
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+    path: /root/etcd_binaries
+
+
+
+#- name: Get the binary files of ETCD
+#  get_url:
+#    url: https://github.com/etcd-io/etcd/releases/download/v3.5.9/etcd-v3.5.9-linux-amd64.tar.gz
+#    dest: /root/etcd_binaries
+
+
+- name: Extract the contents
+  unarchive:
+    src: https://github.com/etcd-io/etcd/releases/download/v3.5.9/etcd-v3.5.9-linux-amd64.tar.gz
+    dest: /root/etcd_binaries/
+    mode: 0744
+    owner: root
+    group: root
+    remote_src: yes
+
+- name: Move the binaries to /bin
+  copy:
+    src: "{{ item }}"
+    dest: /usr/local/bin/
+    remote_src: yes
+    mode: 0744
+    owner: root
+    group: root
+  with_items:
+    - /root/etcd_binaries/etcd-v3.5.9-linux-amd64/etcd
+    - /root/etcd_binaries/etcd-v3.5.9-linux-amd64/etcdctl
+    - /root/etcd_binaries/etcd-v3.5.9-linux-amd64/etcdutl
+
+
+- name: Clean up
+  file:
+    path: /root/etcd_binaries/
+    state: absent
+

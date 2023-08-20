@@ -1,0 +1,54 @@
+---
+- name: extract the certificate key
+  shell: "kubeadm init phase upload-certs --upload-certs | grep -vw -e certificate -e Namespace | awk '{print $NF}'"
+  delegate_to: "{{ hostvars[groups['bamdad'][0]]['ansible_host'] }}"
+  register: certificate_key_k8s
+  become: yes
+
+
+- name: Generate a new token
+  command: kubeadm token generate
+  delegate_to: "{{ hostvars[groups['bamdad'][0]]['ansible_host'] }}"
+  register: token_output
+  become: yes
+
+- name: Get the join command for master nodes
+  command:
+    cmd: kubeadm token create {{ token_output.stdout }} --print-join-command
+  delegate_to: "{{ hostvars[groups['bamdad'][0]]['ansible_host'] }}"
+  register: master_join_command_output
+  become: yes
+
+
+
+- name: Save the master join command to a variable
+  set_fact:
+    master_join_command: "{{ master_join_command_output.stdout }} --certificate-key {{ certificate_key_k8s.stdout }}"
+
+- name: Join the master nodes to the Kubernetes cluster
+  shell: "{{ master_join_command }} --control-plane"
+  when: ("'master' in mode") and ("'false' in init_master")
+  become: yes
+
+
+
+- name: craete adirectory in $HOME/.kube/
+  file:
+    path: $HOME/.kube
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+
+
+- name: copy kubernetes config to home
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: $HOME/.kube/config
+    owner: root
+    group: root
+    mode: 0644
+    remote_src: yes
+
+
+

@@ -1,0 +1,69 @@
+---
+- name: setting up k8s cluster
+  hosts: all
+  become: true
+  tasks:
+    - name: settign the basis on all nodes
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/pre_setup
+        - $PWD/roles/pre_k8s_setup
+        - $PWD/roles/install_crio
+        - $PWD/roles/Install_Helm
+    - name: install kubeadm and kubectl
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/install_kube_adm_ctl_let
+      when: "mode != 'haproxy'"
+
+
+    - name: Run role on haproxy hosts
+      include_role:
+        name: $PWD/roles/haproxy
+      when: "'haproxy' in mode"
+
+
+    - name: get the ip address of haproxy
+      shell: echo "{{ ansible_host }}"
+      changed_when: false
+      when: "'haproxy' in mode"
+      register: ip
+
+
+    - name: add dummy host
+      add_host:
+        name: dummy_haproxy
+
+        haproxy_ip: "{{ ip.stdout }}"
+      when: "'haproxy' in mode"
+
+
+    - name: Run role on first host in bamdad hosts group
+      include_role:
+        name: $PWD/roles/init_k8s
+      when: "'true' in init_master"
+
+- name: join workers and masters
+  hosts: all
+  become: true
+  serial: 1
+  tasks:
+    - name: Run role on other master hosts
+      include_role:
+        name: $PWD/roles/join_masters
+      when: mode == 'master' and init_master == 'false'
+
+    - name: Run role on worker hosts
+      include_role:
+        name: $PWD/roles/join_workers
+      when: "'worker' in mode"
+- name: Install CNI
+  become: true
+  hosts: all
+  tasks:
+    - name: Install Calico
+      include_role:
+        name: $PWD/roles/CNI_Calico
+      when: "'true' in init_master"

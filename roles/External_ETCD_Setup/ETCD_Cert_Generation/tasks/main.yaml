@@ -1,0 +1,89 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: Create private key for CA
+  openssl_privatekey:
+    path: /root/etcd/certs/member-key.pem
+    size: 4096
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+
+- name: Create a CSR for CA
+  template:
+    src: templates/member.cnf.j2
+    dest: /root/etcd/certs/member.cnf
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+
+#- name: Create a CSR for ETCD
+#  openssl_csr:
+#
+#    path: /root/etcd/certs/ca-csr.pem
+#    privatekey_path: /root/etcd/certs/member.cnf
+#    common_name: "/CN=etcd CA"
+
+
+- name: Create a CSR for ETCD
+  shell:
+    cmd: openssl req -new -key /root/etcd/certs/member-key.pem -subj "/CN=etcd" -out /root/etcd/certs/member-csr.pem -config /root/etcd/certs/member.cnf
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+
+- name: Sign the CSR
+  openssl_certificate:
+    csr_path: /root/etcd/certs/member-csr.pem
+    privatekey_path: /root/etcd/certs/ca-key.pem
+    path: /root/etcd/certs/member.pem
+    state: present
+    entrust_not_after: +3650d
+    provider: selfsigned
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+
+- name: Create the directory for the certificates
+  file:
+    path: /root/etcd/certs
+    mode: 0744
+    group: root
+    owner: root
+    state: directory
+
+
+
+- name: Fetch certificates from source host
+  fetch:
+    src: "{{ item }}"
+    dest: /root/etcd_certs/
+    flat: yes
+  with_items:
+    - /root/etcd/certs/member.pem
+    - /root/etcd/certs/member-key.pem
+    - /root/etcd/certs/ca.pem
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+- name: Create the directory for the certificates
+  file:
+    path: /etc/etcd/pki/
+    mode: 0744
+    group: root
+    owner: root
+    state: directory
+
+
+- name: Copy certificates to target hosts
+  copy:
+    src: "{{ item }}"
+    dest: /etc/etcd/pki/
+
+  with_items:
+    - /root/etcd_certs/member.pem
+    - /root/etcd_certs/member-key.pem
+    - /root/etcd_certs/ca.pem

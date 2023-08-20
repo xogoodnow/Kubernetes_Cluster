@@ -1,0 +1,15 @@
+[Unit]
+Description=etcd - highly-available key value store
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+PermissionsStartOnly=true
+ExecStart=/usr/local/bin/etcd --config-file /etc/etcd/etcd.conf.yml
+Restart=on-abnormal
+#RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
+Alias=etcd.service

@@ -1,0 +1,18 @@
+name: "ETCD_3"
+data-dir: "/var/lib/etcd"
+listen-peer-urls: "https://{{ hostvars["etcd-3"]["ansible_host"] }}:2380"
+listen-client-urls: "https://{{ hostvars["etcd-3"]["ansible_host"] }}:2379"
+advertise-client-urls: "https://{{ hostvars["etcd-3"]["ansible_host"] }}:2379"
+initial-advertise-peer-urls: "https://{{ hostvars["etcd-3"]["ansible_host"] }}:2380"
+initial-cluster: "ETCD_1=https://{{ hostvars["etcd-1"]["ansible_host"] }}:2380,ETCD_2=https://{{ hostvars["etcd-2"]["ansible_host"] }}:2380,ETCD_3=https://{{ hostvars["etcd-3"]["ansible_host"] }}:2380"
+initial-cluster-state: "new"
+initial-cluster-token: "etcd-cluster"
+client-transport-security:
+  cert-file: "/etc/etcd/pki/member.pem"
+  key-file: "/etc/etcd/pki/member-key.pem"
+  trusted-ca-file: "/etc/etcd/pki/ca.pem"
+peer-transport-security:
+  cert-file: "/etc/etcd/pki/member.pem"
+  key-file: "/etc/etcd/pki/member-key.pem"
+  trusted-ca-file: "/etc/etcd/pki/ca.pem"
+

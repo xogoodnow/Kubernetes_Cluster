@@ -1,0 +1,48 @@
+all:
+    children:
+        bamdad:
+            hosts:  
+                master-ba-1:
+                    ansible_host:
+                    ansible_user: ubuntu
+                    mode: 'master'
+                    init_master: 'true'
+                master-ba-2:
+                    ansible_host:
+                    ansible_user: ubuntu
+                    mode: 'master'
+                    init_master: 'false'
+                master-ba-3:
+                    ansible_host:
+                    ansible_user: ubuntu
+                    mode: 'master'
+                    init_master: 'false'
+
+
+
+                worker-ba-1:
+                    ansible_host:
+                    ansible_user: ubuntu
+                    mode: 'worker'
+                    init_master: 'false'
+                worker-ba-2:
+                    ansible_host:
+                    ansible_user: ubuntu
+                    mode: 'worker'
+                    init_master: 'false'
+                worker-ba-3:
+                    ansible_host:
+                    ansible_user: ubuntu
+                    mode: 'worker'
+                    init_master: 'false'
+
+
+
+                haproxy:
+                    ansible_host:
+                    ansible_user: ubuntu
+                    mode: 'haproxy'
+                    init_master: 'false'
+
+
+

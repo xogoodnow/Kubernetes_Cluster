@@ -1,0 +1,8 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cr-USERNAME
+rules:
+- apiGroups: [""]  # refers to core API groups
+  resources: [""] #pods, svc, pvc,  ...
+  verbs: [""]  #get, delete, create, ...

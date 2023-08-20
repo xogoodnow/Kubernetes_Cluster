@@ -1,0 +1,36 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Create a directory for the configuration
+  file:
+    path: /etc/etcd/
+    mode: 0744
+    owner: root
+    group: root
+    state: directory
+
+
+- name: Generating the config file for etcd_1
+  template:
+    src: templates/etcd.conf.1.yml.j2
+    dest: /etc/etcd/etcd.conf.yml
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+- name: Generating the config file for etcd_2
+  template:
+    src: templates/etcd.conf.2.yml.j2
+    dest: /etc/etcd/etcd.conf.yml
+  delegate_to: "{{ hostvars['etcd-2']['ansible_host'] }}"
+
+
+- name: Generating the config file for etcd_3
+  template:
+    src: templates/etcd.conf.3.yml.j2
+    dest: /etc/etcd/etcd.conf.yml
+  delegate_to: "{{ hostvars['etcd-3']['ansible_host'] }}"
+
+
+

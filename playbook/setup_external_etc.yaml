@@ -1,0 +1,71 @@
+---
+- name: setting up k8s cluster
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Run role on haproxy hosts
+      include_role:
+        name: $PWD/roles/haproxy
+      when: "'haproxy' in mode"
+
+
+    - name: get the ip address of haproxy
+      shell: echo "{{ ansible_host }}"
+      changed_when: false
+      when: "'haproxy' in mode"
+      register: ip
+
+
+    - name: add dummy host
+      add_host:
+        name: dummy_haproxy
+
+        haproxy_ip: "{{ ip.stdout }}"
+      when: "'haproxy' in mode"
+
+
+
+    - name: Run role on ETCDs hosts in bamdad hosts group
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/External_ETCD_Setup/ETCD_Pre_Setup
+        - $PWD/roles/External_ETCD_Setup/Install_ETCD
+        - $PWD/roles/External_ETCD_Setup/ETCD_Service
+        - $PWD/roles/External_ETCD_Setup/Cert_Authority
+        - $PWD/roles/External_ETCD_Setup/ETCD_Cert_Generation
+        - $PWD/roles/External_ETCD_Setup/ETCD_Configuration
+      when: "'etcd' in mode"
+
+
+    - name: Init the cluster
+      include_role:
+        name: "{{ item }}"
+
+      with_items:
+        - $PWD/roles/External_ETCD_Setup/Init_K8s_External_ETCD
+      when: "'true' in init_master"
+
+- name: join workers and masters
+  hosts: all
+  become: true
+  serial: 1
+  tasks:
+    - name: Run role on other master hosts
+      include_role:
+        name: $PWD/roles/join_masters
+      when: mode == 'master' and init_master == 'false'
+
+    - name: Run role on worker hosts
+      include_role:
+        name: $PWD/roles/join_workers
+      when: "'worker' in mode"
+- name: Install CNI
+  become: true
+  hosts: all
+  tasks:
+    - name: Install Calico
+      include_role:
+        name: $PWD/roles/CNI_Calico
+      when: "'true' in init_master"

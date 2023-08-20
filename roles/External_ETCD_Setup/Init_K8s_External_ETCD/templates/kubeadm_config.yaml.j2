@@ -1,0 +1,19 @@
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+kubernetesVersion: stable
+controlPlaneEndpoint: '"{{ hostvars['haproxy']['ansible_host'] }}":6443'
+etcd:
+  external:
+    endpoints:
+    - https://"{{ hostvars['etcd-1']['ansible_host'] }}":2379
+    - https://"{{ hostvars['etcd-2']['ansible_host'] }}":2379
+    - https://"{{ hostvars['etcd-3']['ansible_host'] }}":2379
+    caFile: /etc/kubernetes/pki/etcd/ca.crt
+    certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
+    keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
+networking:
+  podSubnet: "192.168.0.0/16"
+#Used "192.168.0.0/16" since it is the default subnet for calico
+
+
+

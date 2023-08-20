@@ -1,0 +1,45 @@
+---
+
+- name: craete the keyring directory for google gpg key
+  file:
+    path: /usr/share/keyrings/
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+#- name: add google gpg key to the keyring
+#  get_url:
+#    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+#    dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+
+- name: Download Google's GPG key
+  get_url:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    dest: /tmp/apt-key.gpg
+
+
+- name: Add Google's GPG key to the keyring
+  command:
+    cmd: gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg /tmp/apt-key.gpg
+
+
+- name: add k8s repo to the system
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+
+
+- name: update repos
+  apt:
+    update_cache: yes
+
+
+
+- name: install kube[adm, ctl ,let]
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+

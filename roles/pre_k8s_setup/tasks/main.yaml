@@ -1,0 +1,32 @@
+- name: enable the overlay and br_netfilter kernel modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+    persistent: present
+  with_items:
+    - overlay
+    - br_netfilter
+
+- name: enable bridged traffic using sysctl
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: true
+    sysctl_file: "/etc/sysctl.d/k8s.conf"
+    state: present
+    reload: true
+  with_items:
+    - { name: "net.bridge.bridge-nf-call-iptables", value: '1' }
+    - { name: "net.bridge.bridge-nf-call-ip6tables", value: '1' }
+    - { name: "net.ipv4.ip_forward", value: '1' }
+
+- name: Comment out swap entries in /etc/fstab
+  replace:
+    dest: /etc/fstab
+    regexp: '^/.*swap.*$'
+    replace: '#swap'
+  register: swapison
+
+- name: Turn off swap
+  command: swapoff -a
+  when: swapison.changed

@@ -1,0 +1,43 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Create the directory for the certificates
+  file:
+    path: /root/etcd/certs
+    mode: 0744
+    group: root
+    owner: root
+    state: directory
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+
+- name: Create private key for CA
+  openssl_privatekey:
+    path: /root/etcd/certs/ca-key.pem
+    size: 4096
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+
+- name: Create a CSR for CA
+  openssl_csr:
+    path: /root/etcd/certs/ca-csr.pem
+    privatekey_path: /root/etcd/certs/ca-key.pem
+    common_name: "/CN=etcd CA"
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+
+
+
+- name: Sign the CSR
+  openssl_certificate:
+    csr_path: /root/etcd/certs/ca-csr.pem
+    privatekey_path: /root/etcd/certs/ca-key.pem
+    path: /root/etcd/certs/ca.pem
+    state: present
+    entrust_not_after: +3650d
+    provider: selfsigned
+  delegate_to: "{{ hostvars['etcd-1']['ansible_host'] }}"
+

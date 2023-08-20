@@ -1,0 +1,34 @@
+---
+- name: Download the GPG key of helm
+  get_url:
+    url: https://baltocdn.com/helm/signing.asc
+    dest:  /tmp/apt-key-helm.gpg
+  register: get_gpg_key
+  #failed_when: get_gpg_key is failed
+
+- name: Dearmor the GPG key
+  shell:
+    cmd: gpg --dearmor -o /usr/share/keyrings/helm.gpg /tmp/apt-key-helm.gpg
+    creates: /usr/share/keyrings/helm.gpg
+  register: dearmor_gpg_key
+  #failed_when: dearmor_gpg_key.rc != 0
+
+- name: Remove the downloaded GPG key
+  file:
+    path: /tmp/apt-key-helm.gpg
+    state: absent
+
+- name: Add the repo for helm
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main"
+  #register: add_helm_repo
+  #failed_when: add_helm_repo is failed
+
+- name: Update apt cache and install helm
+  apt:
+    update_cache: true
+    pkg:
+      - helm
+    state: present
+  #register: install_helm
+  #failed_when: install_helm is failed

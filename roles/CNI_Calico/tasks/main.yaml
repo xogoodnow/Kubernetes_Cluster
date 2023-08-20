@@ -1,0 +1,111 @@
+---
+
+- name: Create a directory for the manifest
+  file:
+    path: /root/calico_manifests
+    state: directory
+    group: root
+    owner: root
+    mode: 0755
+
+
+
+- name: Get the Tigera operator manifest
+  get_url:
+    url: https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
+    dest: /root/calico_manifests/tigera-operator.yaml
+  register: get_operator_manifest
+  failed_when: get_operator_manifest is failed
+
+
+- name: Get the custom resources for calico
+  get_url:
+    url: https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/custom-resources.yaml
+    dest: /root/calico_manifests/custom-resources.yaml
+  register: get_custom_resources
+  failed_when: get_custom_resources is failed
+
+
+
+
+- name: apply manifest tigera-operator manifest
+  kubernetes.core.k8s:
+    src: "/root/calico_manifests/tigera-operator.yaml"
+    state: present
+    apply: yes
+    kubeconfig: /etc/kubernetes/admin.conf
+
+
+- name: Waiting for the operator so it would start
+  pause:
+    seconds: 100
+
+
+- name: Apply the manifest to install Calico
+  shell:
+    cmd: kubectl create -f  /root/calico_manifests/custom-resources.yaml
+
+
+
+- name: apply manifest Calico custom-resources
+  kubernetes.core.k8s:
+    src: "/root/calico_manifests/custom-resources.yaml"
+    state: present
+    apply: yes
+    kubeconfig: /etc/kubernetes/admin.conf
+
+
+
+#- name: Create a directory for the manifest
+#  file:
+#    path: /root/calico_manifests
+#    state: directory
+#    group: root
+#    owner: root
+#    mode: 0755
+#
+#
+#- name: Get the Tigera operator manifest
+#  get_url:
+#    url: https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
+#    dest: /root/calico_manifests/tigera-operator.yaml
+#  register: get_operator_manifest
+#  failed_when: get_operator_manifest is failed
+#
+#
+#- name: Get the custom resources for calico
+#  get_url:
+#    url: https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/custom-resources.yaml
+#    dest: /root/calico_manifests/custom-resources.yaml
+#  register: get_custom_resources
+#  failed_when: get_custom_resources is failed
+#
+#
+#- name: Apply the operator
+#  shell:
+#    cmd: kubectl apply -f /root/calico_manifests/tigera-operator.yaml
+#
+#
+#- name: Waiting for the operator so it would start
+#  pause:
+#    seconds: 100
+#
+#
+##- name: Wait for the operator to be ready
+##  shell:
+##    cmd: kubectl -n tigera-operator get tigerastatus/calico
+##  register: operator_status
+##  until: operator_status.stdout.find("Available") != -1
+##  retries: 20
+##  delay: 15
+#
+#- name: Apply the manifest to install Calico
+#  shell:
+#    cmd: kubectl create -f  /root/calico_manifests/custom-resources.yaml
+#
+##  register: apply_manifest
+##  failed_when: apply_manifest.rc != 0
+#
+
+
+
