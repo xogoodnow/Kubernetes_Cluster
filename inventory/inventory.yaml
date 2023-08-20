@@ -1,20 +1,20 @@
 all:
     children:
-        bamdad:
+        kang:
             hosts:  
                 master-ba-1:
                     ansible_host:
-                    ansible_user: ubuntu
+                    ansible_user: root
                     mode: 'master'
                     init_master: 'true'
                 master-ba-2:
                     ansible_host:
-                    ansible_user: ubuntu
+                    ansible_user: root
                     mode: 'master'
                     init_master: 'false'
                 master-ba-3:
                     ansible_host:
-                    ansible_user: ubuntu
+                    ansible_user: root
                     mode: 'master'
                     init_master: 'false'
 
@@ -22,17 +22,17 @@ all:
 
                 worker-ba-1:
                     ansible_host:
-                    ansible_user: ubuntu
+                    ansible_user: root
                     mode: 'worker'
                     init_master: 'false'
                 worker-ba-2:
                     ansible_host:
-                    ansible_user: ubuntu
+                    ansible_user: root
                     mode: 'worker'
                     init_master: 'false'
                 worker-ba-3:
                     ansible_host:
-                    ansible_user: ubuntu
+                    ansible_user: root
                     mode: 'worker'
                     init_master: 'false'
 
@@ -40,7 +40,7 @@ all:
 
                 haproxy:
                     ansible_host:
-                    ansible_user: ubuntu
+                    ansible_user: root
                     mode: 'haproxy'
                     init_master: 'false'
 

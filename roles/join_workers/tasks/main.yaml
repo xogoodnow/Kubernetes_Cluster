@@ -1,14 +1,14 @@
 ---
 - name: Generate a new token
   command: kubeadm token generate
-  delegate_to: "{{ hostvars[groups['bamdad'][0]]['ansible_host'] }}"
+  delegate_to: "{{ hostvars[groups['kang'][0]]['ansible_host'] }}"
   register: token_output
 
 
 - name: Get the join command for worker nodes
   command:
     cmd: kubeadm token create {{ token_output.stdout }} --print-join-command
-  delegate_to: "{{ hostvars[groups['bamdad'][0]]['ansible_host'] }}"
+  delegate_to: "{{ hostvars[groups['kang'][0]]['ansible_host'] }}"
   register: worker_join_command_output
 
 

@@ -3,7 +3,7 @@
   hosts: all
   become: true
   tasks:
-    - name: settign the basis on all nodes
+    - name: Setting the basis on all nodes
       include_role:
         name: "{{ item }}"
       with_items:
@@ -11,6 +11,9 @@
         - $PWD/roles/pre_k8s_setup
         - $PWD/roles/install_crio
         - $PWD/roles/Install_Helm
+      when: "mode != 'haproxy'"
+
+
     - name: install kubeadm and kubectl
       include_role:
         name: "{{ item }}"
@@ -19,28 +22,17 @@
       when: "mode != 'haproxy'"
 
 
-    - name: Run role on haproxy hosts
+    - name: Run role on haproxy host
       include_role:
-        name: $PWD/roles/haproxy
+        name: "{{ item }}"
+      with_items:
+        - $PWD/roles/haproxy
+        - $PWD/roles/pre_setup
       when: "'haproxy' in mode"
 
 
-    - name: get the ip address of haproxy
-      shell: echo "{{ ansible_host }}"
-      changed_when: false
-      when: "'haproxy' in mode"
-      register: ip
 
-
-    - name: add dummy host
-      add_host:
-        name: dummy_haproxy
-
-        haproxy_ip: "{{ ip.stdout }}"
-      when: "'haproxy' in mode"
-
-
-    - name: Run role on first host in bamdad hosts group
+    - name: Run role on first host in hosts group
       include_role:
         name: $PWD/roles/init_k8s
       when: "'true' in init_master"

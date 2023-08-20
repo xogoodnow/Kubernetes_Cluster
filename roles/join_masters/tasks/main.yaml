@@ -1,21 +1,21 @@
 ---
 - name: extract the certificate key
   shell: "kubeadm init phase upload-certs --upload-certs | grep -vw -e certificate -e Namespace | awk '{print $NF}'"
-  delegate_to: "{{ hostvars[groups['bamdad'][0]]['ansible_host'] }}"
+  delegate_to: "{{ hostvars[groups['kang'][0]]['ansible_host'] }}"
   register: certificate_key_k8s
   become: yes
 
 
 - name: Generate a new token
   command: kubeadm token generate
-  delegate_to: "{{ hostvars[groups['bamdad'][0]]['ansible_host'] }}"
+  delegate_to: "{{ hostvars[groups['kang'][0]]['ansible_host'] }}"
   register: token_output
   become: yes
 
 - name: Get the join command for master nodes
   command:
     cmd: kubeadm token create {{ token_output.stdout }} --print-join-command
-  delegate_to: "{{ hostvars[groups['bamdad'][0]]['ansible_host'] }}"
+  delegate_to: "{{ hostvars[groups['kang'][0]]['ansible_host'] }}"
   register: master_join_command_output
   become: yes
 
