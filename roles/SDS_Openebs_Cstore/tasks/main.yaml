@@ -11,23 +11,20 @@
     group: root
     owner: root
 
-
-
 - name: Get block device information
   command: kubectl get bd -n openebs -o json
   register: bd_output
 
 - name: Parse block device information
   set_fact:
-    block_devices: "{{ bd_output.stdout | from_json }}"
+    block_devices: "{{ bd_output.stdout | from_json | json_query('items[].{metadata: metadata, spec: spec}') }}"
 
 - name: Generate CSPC manifest
   template:
     src: templates/CSPC.yaml.j2
     dest: /root/openebs_config/cspc.yaml
   vars:
-    block_devices: "{{ block_devices.items }}"
-
+    block_devices: "{{ block_devices }}"
 
 - name: Copy the storage class manifest to the respective directory
   copy:

@@ -7,7 +7,7 @@ spec:
   pools:
 {% for bd in block_devices %}
     - nodeSelector:
-        kubernetes.io/hostname: "{{ bd.spec.node }}"
+        kubernetes.io/hostname: "{{ bd.metadata.labels.nodename }}"
       dataRaidGroups:
         - blockDevices:
           - blockDeviceName: "{{ bd.metadata.name }}"
