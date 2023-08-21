@@ -55,9 +55,9 @@
   pause:
     prompt: "Proceed if everything is alright"
 
-- name: Verify if the upgrade is compatible with the current cluster configuration
+- name:  Upgrade the cluster
   shell:
-    cmd: kubeadm upgrade apply v1.26.0 
+    cmd: kubeadm upgrade apply v1.26.0 -y --v=5
 
 
 #apt update
