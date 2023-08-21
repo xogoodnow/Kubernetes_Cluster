@@ -45,6 +45,16 @@
 - name: Verify if the upgrade is compatible with the current cluster configuration
   shell:
     cmd: kubeadm upgrade apply v1.26.0
+  register: upgrade_apply_result
+
+- name: Print the result of upgrade apply command
+  debug:
+    var: upgrade_apply_result
+
+- name: Check to proceed to other master nodes
+  pause:
+    prompt: "Proceed if everything is alright"
+
 
 
 #apt update
