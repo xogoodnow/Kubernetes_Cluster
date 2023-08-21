@@ -43,3 +43,11 @@
     - kubeadm=1.25.0-00
     - kubectl=1.25.0-00
 
+
+- name: Hold the packages to prevent accidental updates
+  dpkg_selections:
+    name: "{{ item }}"
+  with_items:
+    - kubelet
+    - kubectl
+    - kubeadm
