@@ -1,0 +1,35 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Create a directory for openebs
+  file:
+    path: /root/openebs_config
+    state: directory
+    mode: 0744
+    group: root
+    owner: root
+
+
+
+- name: Get block device information
+  command: kubectl get bd -n openebs -o json
+  register: bd_output
+
+- name: Parse block device information
+  set_fact:
+    block_devices: "{{ bd_output.stdout | from_json }}"
+
+- name: Generate CSPC manifest
+  template:
+    src: cspc_template.yaml.j2
+    dest: /root/openebs_config/cspc.yaml
+  vars:
+    block_devices: "{{ block_devices.items }}"
+
+
+- name: Copy the storage class manifest to the respective directory
+  copy:
+    src: files/Storage_Class.yaml
+    dest: /root/openebs_config/Storage_Class.yaml

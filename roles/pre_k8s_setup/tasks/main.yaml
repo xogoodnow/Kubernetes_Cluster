@@ -1,3 +1,8 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
 - name: enable the overlay and br_netfilter kernel modules
   modprobe:
     name: "{{ item }}"
