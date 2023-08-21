@@ -39,7 +39,7 @@
   apt:
     name: "{{ item }}"
   with_items:
-    - kubelet
-    - kubeadm
-    - kubectl
+    - kubelet=1.25.0-00
+    - kubeadm=1.25.0-00
+    - kubectl=1.25.0-00
 
