@@ -1,0 +1,62 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: Drain the node
+  kubernetes.core.k8s_drain:
+    state: drain
+    name: foo
+    delete_options:
+      ignore_daemonsets: true
+
+- name: update repos
+  apt:
+    update_cache: yes
+    allow_downgrade: yes
+
+- name: Unhold kubeadm for updating
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: install
+  with_items:
+    - kubelet
+    - kubectl
+
+- name: Update kubeadm version
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - kubelet=1.26.0-00
+    - kubectl=1.26.0-00
+
+
+- name: Hold the packages to prevent accidental updates
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  with_items:
+    - kubelet
+    - kubectl
+
+- name: Reload the systemd daemon
+  systemd:
+    daemon_reload: true
+
+
+- name: Enable and start the service
+  systemd:
+    name: kubelet
+    state: restarted
+    enabled: true
+
+- name: Uncordon the node
+  kubernetes.core.k8s_drain:
+    state: uncordon
+    name: foo
+
+
+
+
