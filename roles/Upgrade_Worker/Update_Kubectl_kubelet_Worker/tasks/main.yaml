@@ -11,6 +11,10 @@
     delete_options:
       ignore_daemonsets: true
 
+- name: Wait for the node to be drained
+  pause:
+    seconds: 20
+
 - name: update repos
   apt:
     update_cache: yes
