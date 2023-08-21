@@ -21,7 +21,6 @@
     state: present
 
 
-
 - name: Hold the packages to prevent accidental updates
   dpkg_selections:
     name: kubeadm
@@ -30,8 +29,27 @@
 
 - name: Upgrade kubeadm on master node
   shell:
-    cmd: kubeadm upgrade node
+    cmd: kubeadm upgrade node --dry-run
+  register: upgrade_master_result
 
+
+- name: Echo the result of upgrade kubeadm
+  debug:
+    var: upgrade_master_result
+
+
+- name: Check to proceed to upgrade master nodes
+  pause:
+    prompt: "Proceed if everything is alright"
+
+- name: Upgrade kubeadm on master node
+  shell:
+    cmd: kubeadm upgrade node --dry-run
+  register: actual_upgrade_master_result
+
+- name: Echo the result of actual upgrade kubeadm
+  debug:
+    var: actual_upgrade_master_result
 
 
 #apt update
