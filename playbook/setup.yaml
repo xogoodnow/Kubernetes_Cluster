@@ -58,4 +58,21 @@
     - name: Install Calico
       include_role:
         name: $PWD/roles/CNI_Calico
-      when: "'true' in init_master"
+      when: mode == 'master' and init_master == 'true'
+
+
+    - name: Install the Openebs Helm chart
+      include_role:
+        name: $PWD/roles/SDS_Openebs_Cstore/Openebs_Helm
+      when: mode == 'master' and init_master == 'true'
+
+    - name: Generate the required resources for Openebs
+      include_role:
+        name: $PWD/roles/SDS_Openebs_Cstore/Cstore_Config
+      when: mode == 'master' and init_master == 'true'
+
+    - name: Apply the resource
+      include_role:
+        name: $PWD/roles/SDS_Openebs_Cstore/Apply_Openebs_Resources
+      when: mode == 'master' and init_master == 'true'
+
