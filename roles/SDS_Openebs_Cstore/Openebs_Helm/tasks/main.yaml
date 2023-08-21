@@ -9,8 +9,9 @@
 
 - name: Copy the files to the directory
   copy:
-    dest: /root/openebs_config/
+    dest: /root/openebs_config
     src: files/openebs
+    force: true
 
 - name: Verify if helm is installed on the system
   shell:
@@ -22,7 +23,7 @@
 
 - name: Install storage controller on the cluster
   kubernetes.core.helm:
-    name: storage-controller
+    name: openebs
     chart_ref: /root/openebs_config/openebs
     wait: true
     release_state: present
