@@ -32,21 +32,26 @@
 - name: update repos
   apt:
     update_cache: yes
+    allow_downgrade: yes
+
 
 
 
 - name: install kube[adm, ctl ,let]
   apt:
     name: "{{ item }}"
+    allow_downgrade: yes
   with_items:
     - kubelet=1.25.0-00
     - kubeadm=1.25.0-00
     - kubectl=1.25.0-00
 
 
+
 - name: Hold the packages to prevent accidental updates
   dpkg_selections:
     name: "{{ item }}"
+    selection: hold
   with_items:
     - kubelet
     - kubectl
