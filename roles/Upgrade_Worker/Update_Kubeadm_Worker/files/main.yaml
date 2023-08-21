@@ -1,0 +1,37 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: update repos
+  apt:
+    update_cache: yes
+    allow_downgrade: yes
+
+- name: Unhold kubeadm for updating
+  dpkg_selections:
+    name: kubeadm
+    selection: install
+
+
+- name: Update kubeadm version
+  apt:
+    name: kubeadm=1.26.0-00
+    state: present
+
+
+
+- name: Hold the packages to prevent accidental updates
+  dpkg_selections:
+    name: kubeadm
+    selection: hold
+
+
+- name: Verify if the upgrade is compatible with the current cluster configuration
+  shell:
+    cmd: kubeadm upgrade node
+
+
+
+
