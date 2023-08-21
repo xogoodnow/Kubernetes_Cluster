@@ -23,7 +23,7 @@
 
 - name: Generate CSPC manifest
   template:
-    src: cspc_template.yaml.j2
+    src: templates/CSPC.yaml.j2
     dest: /root/openebs_config/cspc.yaml
   vars:
     block_devices: "{{ block_devices.items }}"
