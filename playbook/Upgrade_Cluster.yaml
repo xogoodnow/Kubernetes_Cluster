@@ -1,0 +1,33 @@
+---
+- name: join workers and masters
+  hosts: all
+  become: true
+  serial: 1
+  tasks:
+    - name: Update kubeadm on the first master
+      include_role:
+        name: $PWD/roles/Upgrade_Master/Update_Kubeadm_First_Master
+      when: mode == 'master' and init_master == 'true'
+
+    - name: Run role on other master nodes
+      include_role:
+        name: $PWD/roles/Upgrade_Master/Update_Kubeadm_Other_Masters
+      when: mode == 'master' and init_master == 'false'
+
+    - name: Run role on other master nodes
+      include_role:
+        name: $PWD/roles/Upgrade_Master/Update_Kubectl_kubelet_Master
+      when: mode == 'master'
+
+
+
+    - name: Run role on other worker nodes
+      include_role:
+        name: $PWD/roles/Upgrade_Worker/Update_Kubeadm_Worker
+      when: mode == 'worker'
+
+    - name: Run role on other master hosts
+      include_role:
+        name: $PWD/roles/Upgrade_Worker/Update_Kubectl_kubelet_Worker
+      when: mode == 'worker'
+
