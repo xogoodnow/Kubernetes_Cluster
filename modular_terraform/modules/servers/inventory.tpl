@@ -3,14 +3,14 @@ all:
         kang:
             hosts:
             %{ for index, ip in master_ips }
-                master-ba-${index}:
+                master-ka-${index}:
                     ansible_host: ${ip}
                     ansible_user: root
                     mode: 'master'
                     init_master: ${index == 0 ? "'true'" : "'false'"}
             %{ endfor }
             %{ for index, ip in worker_ips }
-                worker-ba-${index}:
+                worker-ka-${index}:
                     ansible_host: ${ip}
                     ansible_user: root
                     mode: 'worker'
