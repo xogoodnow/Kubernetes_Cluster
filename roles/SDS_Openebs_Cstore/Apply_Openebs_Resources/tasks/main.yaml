@@ -1,0 +1,24 @@
+---
+
+- name: Apply The cspc for Openebs
+  kubernetes.core.k8s:
+    src: "/root/openebs_config/cspc.yaml"
+    state: present
+    apply: true
+    kubeconfig: /etc/kubernetes/admin.conf
+
+
+- name: Waiting for the operator so it would finish up its set up
+  pause:
+    seconds: 20
+
+
+- name: Apply the storage class for the cluster
+  kubernetes.core.k8s:
+    src: "/root/openebs_config/Storage_Class.yaml"
+    state: present
+    apply: true
+    kubeconfig: /etc/kubernetes/admin.conf
+
+
+
