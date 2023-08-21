@@ -1,6 +1,6 @@
 all:
     children:
-        bamdad:
+        kang:
             hosts:
             %{ for index, ip in master_ips }
                 master-ba-${index}:
