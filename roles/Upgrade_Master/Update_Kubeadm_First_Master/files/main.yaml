@@ -1,0 +1,73 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: update repos
+  apt:
+    update_cache: yes
+    allow_downgrade: yes
+
+- name: Unhold kubeadm for updating
+  dpkg_selections:
+    name: kubeadm
+    selection: install
+
+
+- name: Update kubeadm version
+  apt:
+    name: kubeadm=1.26.0-00
+    state: present
+
+
+
+- name: Hold the packages to prevent accidental updates
+  dpkg_selections:
+    name: kubeadm
+    selection: hold
+
+- name: Verify if the upgrade is compatible with the current cluster configuration
+  shell:
+    cmd: kubeadm upgrade plan
+  register: upgrade_plan
+
+- name: Printing the result of kube upgrade plan
+  debug:
+    var: upgrade_plan
+
+
+- name: Check the results and proceed if everything is ok
+  pause:
+    prompt: "Proceed if everything is alright"
+
+
+- name: Verify if the upgrade is compatible with the current cluster configuration
+  shell:
+    cmd: kubeadm upgrade apply v1.26.0
+
+
+#apt update
+#
+#
+#
+#
+#apt-mark unhold kubeadm
+#
+# apt-get update && apt-get install -y kubeadm=1.26.x-00 && \
+#
+# apt-mark hold kubeadm
+#
+#kubeadm upgrade plan
+#kubectl drain <node-to-drain> --ignore-daemonsets
+#
+#apt-mark unhold kubelet kubectl && \
+#apt-get update && apt-get install -y kubelet=1.26.x-00 kubectl=1.26.x-00 && \
+#apt-mark hold kubelet kubectl
+#sudo systemctl daemon-reload
+#sudo systemctl restart kubelet
+#
+#kubectl uncordon <node-to-uncordon>
+
+
+
