@@ -30,8 +30,33 @@
 
 - name: Verify if the upgrade is compatible with the current cluster configuration
   shell:
+    cmd: kubeadm upgrade node --dry-run
+  register: dry_run_upgrade
+
+
+- name: Print the result of upgrade apply command
+  debug:
+    var: dry_run_upgrade
+
+
+- name: Check to proceed to upgrade master nodes
+  pause:
+    prompt: "Proceed if everything is alright"
+
+
+- name: Upgrade the cluster
+  shell:
     cmd: kubeadm upgrade node
+  register: cluster_upgrade
 
 
+- name: Print the result of upgrade apply command
+  debug:
+    var: cluster_upgrade
+
+
+- name: Check to proceed to upgrade master nodes
+  pause:
+    prompt: "Proceed if everything is alright"
 
 

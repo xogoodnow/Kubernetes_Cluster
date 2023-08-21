@@ -7,7 +7,7 @@
 - name: Drain the node
   kubernetes.core.k8s_drain:
     state: drain
-    name: {{ansible_hostname}}
+    name: "{{ ansible_hostname }}"
     delete_options:
       ignore_daemonsets: true
 
@@ -55,7 +55,9 @@
 - name: Uncordon the node
   kubernetes.core.k8s_drain:
     state: uncordon
-    name: {{ansible_hostname}}
+    name: "{{ ansible_hostname }}"
+
+
 
 
 
