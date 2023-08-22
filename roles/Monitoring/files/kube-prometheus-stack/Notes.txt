@@ -1,0 +1,9 @@
+Create the following secret to be able to get the etcd data:
+kubectl create secret -n monitoring generic etcd-client --from-file=/etc/kubernetes/pki/etcd/ca.crt --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.crt --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.key
+
+
+sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-scheduler.yaml
+
+sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-controller-manager.yam
+
+
