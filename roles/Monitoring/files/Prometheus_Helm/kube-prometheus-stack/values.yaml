@@ -2376,7 +2376,7 @@ prometheusOperator:
       sha: ""
 
     # add prometheus config reloader liveness and readiness probe. Default: false
-    enableProbe: false
+    enableProbe: true
 
     # resource config for prometheusConfigReloader
     resources:
