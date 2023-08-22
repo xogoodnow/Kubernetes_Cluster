@@ -25,10 +25,10 @@
 
 
 - name: Create the namespace for monitoring
-  shell:
-    cmd: kubectl apply -f /root/monitoring/Monitoring_namespace.yaml
-  register: namespace_chck
-  changed_when: "'unchanged' not in namespace_chck.stdout"
+  kubernetes.core.k8s:
+    src: "/root/monitoring/Monitoring_namespace.yaml"
+    state: present
+    kubeconfig: /etc/kubernetes/admin.conf
 
 
 
