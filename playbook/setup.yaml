@@ -86,4 +86,18 @@
         name: $PWD/roles/Automate_Etcd_Backup_Setup/Backup_Cron_Job
       when: mode == 'master'
 
+    - name: Installing Cert Manager
+      include_role:
+        name: $PWD/roles/Cert_manager
+      when: mode == 'master' and init_master == 'true'
 
+
+    - name: Installing Monitoring for the cluster
+      include_role:
+        name: $PWD/roles/Monitoring
+      when: mode == 'master' and init_master == 'true'
+
+    - name: Installing ingress controller
+      include_role:
+        name: $PWD/roles/Ingress
+      when: mode == 'master' and init_master == 'true'

@@ -25,7 +25,7 @@
     day: "*"
     cron_file: etcd_back_up_kang
     user: root
-    job: "ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /data/etcd-backup/etcd-snapshot-$(hostname)-$(date +%Y-%m-%dT%H:%M).db && s3cmd put -r /data/etcd-backup/ s3://kangetcdbackup"
+    job: "ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /data/etcd-backup/etcd-snapshot-$(hostname)-$(date +%Y-%m-%dT%H:%M).db & s3cmd put -r /data/etcd-backup/ s3://kangetcdbackup"
     state: present
 
 
