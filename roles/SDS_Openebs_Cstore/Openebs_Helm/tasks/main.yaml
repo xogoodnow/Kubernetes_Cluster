@@ -22,6 +22,7 @@
   unarchive:
     src: /root/openebs_config/openebs.tar
     dest: /root/openebs_config/
+    remote_src: true
 
 
 
@@ -37,15 +38,22 @@
 - name: Install storage controller on the cluster
   kubernetes.core.helm:
     name: openebs
+    create_namespace: true
     chart_ref: /root/openebs_config/openebs
     wait: true
     release_state: present
     values_files: "/root/openebs_config/openebs/values.yaml"
     release_namespace: "openebs"
+    set_values:
+      - value: cstor.enabled=true
+        value_type: string
+
     atomic: true
-    create_namespace: true
 
 
+- name: Pause for the controller to be set up
+  pause:
+    seconds: 20
 
 
 
