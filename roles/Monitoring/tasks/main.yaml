@@ -1,0 +1,52 @@
+---
+- name: Craete a directory for monitoring
+  file:
+    path: /root/monitoring
+    mode: 0755
+    owner: root
+    group: root
+    state: directory
+
+
+- name: Copy the content to the directory
+  copy:
+    dest: /root/monitoring/
+    src: files/
+
+
+
+- name: Create the ingress for the monitoring
+  shell:
+    cmd: kubectl apply -f /root/monitoring/Monitoring_ingress.yaml
+  register: ingress_chck
+  changed_when: "'unchanged' not in ingress_chck.stdout"
+
+
+
+
+- name: Create the namespace for monitoring
+  shell:
+    cmd: kubectl apply -f /root/monitoring/Monitoring_namespace.yaml
+  register: namespace_chck
+  changed_when: "'unchanged' not in namespace_chck.stdout"
+
+
+
+- name: Install the helm chart of prometheus with custom values
+  kubernetes.core.helm:
+    name: ingress-controller
+    chart_ref: /root/monitoring/Prometheus_Helm
+    wait: true
+    release_state: present
+    values_files: "/root/monitoring/Prometheus_Helm/values.yaml"
+    release_namespace: "monitoring"
+    atomic: true
+    create_namespace: true
+
+
+
+
+
+
+
+
