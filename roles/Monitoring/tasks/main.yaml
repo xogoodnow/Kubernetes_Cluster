@@ -15,30 +15,30 @@
 
 
 
-- name: Create the ingress for the monitoring
-  shell:
-    cmd: kubectl apply -f /root/monitoring/Monitoring_ingress.yaml
-  register: ingress_chck
-  changed_when: "'unchanged' not in ingress_chck.stdout"
+#- name: Create the ingress for the monitoring
+#  shell:
+#    cmd: kubectl apply -f /root/monitoring/Monitoring_ingress.yaml
+#  register: ingress_chck
+#  changed_when: "'unchanged' not in ingress_chck.stdout"
+#
 
 
-
-
-- name: Create the namespace for monitoring
-  kubernetes.core.k8s:
-    src: "/root/monitoring/Monitoring_namespace.yaml"
-    state: present
-    kubeconfig: /etc/kubernetes/admin.conf
-
+#
+#- name: Create the namespace for monitoring
+#  kubernetes.core.k8s:
+#    src: "/root/monitoring/Monitoring_namespace.yaml"
+#    state: present
+#    kubeconfig: /etc/kubernetes/admin.conf
+#
 
 
 - name: Install the helm chart of prometheus with custom values
   kubernetes.core.helm:
     name: ingress-controller
-    chart_ref: /root/monitoring/Prometheus_Helm
+    chart_ref: /root/monitoring/kube-prometheus-stack
     wait: true
     release_state: present
-    values_files: "/root/monitoring/Prometheus_Helm/values.yaml"
+    values_files: "/root/monitoring/kube-prometheus-stack/values.yaml"
     release_namespace: "monitoring"
     atomic: true
     create_namespace: true
