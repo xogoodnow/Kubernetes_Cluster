@@ -76,3 +76,14 @@
         name: $PWD/roles/SDS_Openebs_Cstore/Apply_Openebs_Resources
       when: mode == 'master' and init_master == 'true'
 
+    - name: Generate the required resources for Openebs
+      include_role:
+        name: $PWD/roles/Automate_Etcd_Backup_Setup/Configure_S3cmd
+      when: mode == 'master'
+
+    - name: Install the Openebs Helm chart
+      include_role:
+        name: $PWD/roles/Automate_Etcd_Backup_Setup/Backup_Cron_Job
+      when: mode == 'master'
+
+
