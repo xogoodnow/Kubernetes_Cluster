@@ -1,0 +1,25 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+- name: update and upgrade system
+  apt:
+    update_cache: yes
+
+
+- name: install S3cmd
+  apt:
+    pkg:
+      - s3cmd
+    state: present
+
+- name: Copy the config file to the root user directory
+  copy:
+    src: files/.s3cfg
+    dest: /root/.s3cfg
+    mode: 0700
+    owner: root
+    group: root
+
