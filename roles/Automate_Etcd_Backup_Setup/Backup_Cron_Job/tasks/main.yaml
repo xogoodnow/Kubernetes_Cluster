@@ -15,17 +15,11 @@
       - etcd-client
     state: present
 
-- name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
-  ansible.builtin.cron:
-    name: "check dirs"
-    minute: "0"
-    hour: "5,2"
-    job: "ls -alh > /dev/null"
 
-- name: Ensure a job that runs at 2 and 5 exists. Creates an entry like "0 5,2 * * ls -alh > /dev/null"
+- name: Backing up (Full) ETCD every first minute of every hour
   ansible.builtin.cron:
     name: "Etcd Backup"
-    minute: "1"
+    minute: "50"
     hour: "*"
     job: "ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /data/etcd-backup/etcd-snapshot-($hostname)-$(date +%Y-%m-%dT%H:%M).db && s3cmd put -r /data/etcd-backup/ s3://kangetcdbackup"
 
