@@ -39,6 +39,11 @@
 
 
 
+- name: Create the cluster issuer
+  kubernetes.core.k8s:
+    src: "/root/certmanager/cluster-issuer.yaml"
+    state: present
+    kubeconfig: /etc/kubernetes/admin.conf
 
 
 
