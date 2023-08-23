@@ -2699,9 +2699,9 @@ prometheus:
     ## if not set, name will be auto generated
     # name: ""
     annotations: {}
-    data:
-     auth: |
-       kang:$2a$12$JsiwhLitNC229keI.qF.Du5GzGW5b.7iP/MkqXz2NHNYkJXhheeQm
+    data: {}
+#     auth: |
+#       kang:$2a$12$JsiwhLitNC229keI.qF.Du5GzGW5b.7iP/MkqXz2NHNYkJXhheeQm
 
   ingress:
     enabled: true
