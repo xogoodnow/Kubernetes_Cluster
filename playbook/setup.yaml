@@ -52,7 +52,7 @@
       include_role:
         name: $PWD/roles/join_workers
       when: "'worker' in mode"
-      
+
 
 - name: Set up CNI and CSI
   become: true
