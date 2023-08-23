@@ -21,7 +21,6 @@
     kubeconfig: /etc/kubernetes/admin.conf
 
 
-- name: Make kang-sc the default storage class for all PVCs
-  shell:
-    cmd: kubectl patch storageclass kang-sc -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-  failed_when: false
+#- name: Make kang-sc the default storage class for all PVCs
+#  shell: kubectl patch storageclass kang-sc -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+#  failed_when: false
