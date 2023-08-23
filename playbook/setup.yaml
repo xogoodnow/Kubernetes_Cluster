@@ -114,14 +114,14 @@
   become: true
   hosts: all
   tasks:
-    - name: Installing monitoring
+    - name: Configuring connection with S3bucket
+      include_role:
+        name: $PWD/roles/Automate_Etcd_Backup_Setup/Configure_S3cmd
+      when: mode == 'master'
+
+    - name: Adding a cron job to backup ETCD
       include_role:
         name: $PWD/roles/Automate_Etcd_Backup_Setup/Backup_Cron_Job
       when: mode == 'master'
 
-
-    - name: Installing monitoring
-      include_role:
-        name: $PWD/roles/Automate_Etcd_Backup_Setup/Configure_S3cmd
-      when: mode == 'master'
 
