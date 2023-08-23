@@ -32,7 +32,9 @@
     atomic: true
     create_namespace: true
 
-
+- name: wait for the probes to be ready
+  pause:
+    seconds: 40
 
 
 

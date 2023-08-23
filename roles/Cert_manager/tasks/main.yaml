@@ -37,7 +37,9 @@
     atomic: true
     create_namespace: true
 
-
+- name: Wait for the probes to be ready
+  pause:
+    seconds: 30
 
 - name: Create the cluster issuer
   kubernetes.core.k8s:
