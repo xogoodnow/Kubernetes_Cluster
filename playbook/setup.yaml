@@ -109,3 +109,19 @@
       when: mode == 'master' and init_master == 'true'
 
 
+
+- name: Implement backup procedure for etcd
+  become: true
+  hosts: all
+  tasks:
+    - name: Installing monitoring
+      include_role:
+        name: $PWD/roles/Automate_Etcd_Backup_Setup/Backup_Cron_Job
+      when: mode == 'master'
+
+
+    - name: Installing monitoring
+      include_role:
+        name: $PWD/roles/Automate_Etcd_Backup_Setup/Configure_S3cmd
+      when: mode == 'master'
+
