@@ -1,5 +1,5 @@
 ---
-- name: Craete a directory for monitoring
+- name: Create a directory for monitoring
   file:
     path: /root/monitoring
     mode: 0755
@@ -12,6 +12,10 @@
     dest: /root/monitoring/
     src: files/
 
+- name: Create a secret in monitoring namespace for prometheus server to access ETCD metrics
+  shell:
+    cmd: kubectl create secret -n monitoring generic etcd-client --from-file=/etc/kubernetes/pki/etcd/ca.crt --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.crt --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.key
+
 
 - name: Change the binding address of services so prometheus would be able to scrape data
   shell:
@@ -19,8 +23,6 @@
   with_items:
     - sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-scheduler.yaml
     - sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-controller-manager.yaml
-
-
 
 - name: Install the helm chart of kube-prometheus with custom values
   kubernetes.core.helm:
