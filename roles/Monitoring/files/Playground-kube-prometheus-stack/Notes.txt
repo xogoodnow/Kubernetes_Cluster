@@ -22,3 +22,5 @@ https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeproxydown/
 
 
 kill coredns (for some reason it solves the problem)
+
+
