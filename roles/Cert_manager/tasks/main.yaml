@@ -30,11 +30,9 @@
   kubernetes.core.helm:
     name: cert-manager
     chart_ref: /root/certmanager
-    wait: true
     release_state: present
     values_files: "/root/certmanager/values.yaml"
     release_namespace: "cert-manager"
-    atomic: true
     create_namespace: true
 
 - name: Wait for the probes to be ready

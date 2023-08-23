@@ -25,12 +25,12 @@
   kubernetes.core.helm:
     name: ingress-controller
     chart_ref: /root/ingress_controller/nginx-ingress
-    wait: true
     release_state: present
     values_files: "/root/ingress_controller/nginx-ingress/values.yaml"
     release_namespace: "ingress-controller"
-    atomic: true
     create_namespace: true
+
+
 
 - name: wait for the probes to be ready
   pause:
