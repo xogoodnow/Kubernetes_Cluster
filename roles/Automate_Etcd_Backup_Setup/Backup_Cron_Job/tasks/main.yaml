@@ -8,6 +8,14 @@
   apt:
     update_cache: yes
 
+- name: Create backup directory
+  file:
+    path: /data/etcd-backup
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
 
 - name: Install Etcdctl
   apt:
@@ -20,14 +28,13 @@
   ansible.builtin.cron:
     name: "Etcd Backup"
     weekday: "*"
-    minute: "25"
+    minute: "59"
     hour: "*"
     day: "*"
     cron_file: etcd_back_up_kang
     user: root
-    job: "ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /data/etcd-backup/etcd-snapshot-$(hostname)-$(date +%Y-%m-%dT%H:%M).db & s3cmd put -r /data/etcd-backup/ s3://kangetcdbackup"
+    job: ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key snapshot save /data/etcd-backup/etcd-snapshot-$(hostname)-$(date +\%Y-\%m-\%dT\%H:\%M).db  && s3cmd put -r /data/etcd-backup/ s3://kangetcdbackup/
     state: present
-
 
 
 
