@@ -12,9 +12,28 @@
     dest: /root/monitoring/
     src: files/
 
+- name: Create Monitoring namespace
+  kubernetes.core.k8s:
+    src: "/root/monitoring/Monitoring_namespace.yaml"
+    state: present
+    kubeconfig: /etc/kubernetes/admin.conf
+
 - name: Create a secret in monitoring namespace for prometheus server to access ETCD metrics
   shell:
     cmd: kubectl create secret -n monitoring generic etcd-client --from-file=/etc/kubernetes/pki/etcd/ca.crt --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.crt --from-file=/etc/kubernetes/pki/etcd/healthcheck-client.key
+
+  failed_when: false
+
+
+- name: Install the helm chart of kube-prometheus with custom values
+  kubernetes.core.helm:
+    name: monitoring
+    chart_ref: /root/monitoring/kube-prometheus-stack/
+    release_state: present
+    values_files: "/root/monitoring/kube-prometheus-stack/values.yaml"
+    release_namespace: monitoring
+    create_namespace: true
+
 
 
 - name: Change the binding address of services so prometheus would be able to scrape data
@@ -23,21 +42,6 @@
   with_items:
     - sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-scheduler.yaml
     - sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-controller-manager.yaml
-
-- name: Install the helm chart of kube-prometheus with custom values
-  kubernetes.core.helm:
-    name: monitoring
-    chart_ref: /root/monitoring/kube-prometheus-stack
-    wait: true
-    release_state: present
-    values_files: "/root/monitoring/kube-prometheus-stack/values.yaml"
-    release_namespace: monitoring
-    atomic: true
-    create_namespace: true
-
-
-
-
 
 
 
