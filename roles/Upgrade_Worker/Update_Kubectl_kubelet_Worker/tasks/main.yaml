@@ -10,6 +10,7 @@
     name: "{{ ansible_hostname }}"
     delete_options:
       ignore_daemonsets: true
+      delete_emptydir_data: true
 
 - name: Wait for the node to be drained
   pause:
