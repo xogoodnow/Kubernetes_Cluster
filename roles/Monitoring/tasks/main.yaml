@@ -7,39 +7,29 @@
     group: root
     state: directory
 
-
 - name: Copy the content to the directory
   copy:
     dest: /root/monitoring/
     src: files/
 
 
-
-#- name: Create the ingress for the monitoring
-#  shell:
-#    cmd: kubectl apply -f /root/monitoring/Monitoring_ingress.yaml
-#  register: ingress_chck
-#  changed_when: "'unchanged' not in ingress_chck.stdout"
-#
-
-
-#
-#- name: Create the namespace for monitoring
-#  kubernetes.core.k8s:
-#    src: "/root/monitoring/Monitoring_namespace.yaml"
-#    state: present
-#    kubeconfig: /etc/kubernetes/admin.conf
-#
+- name: Change the binding address of services so prometheus would be able to scrape data
+  shell:
+    cmd: "{{ item }}"
+  with_items:
+    - sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-scheduler.yaml
+    - sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-controller-manager.yaml
 
 
-- name: Install the helm chart of prometheus with custom values
+
+- name: Install the helm chart of kube-prometheus with custom values
   kubernetes.core.helm:
-    name: ingress-controller
+    name: monitoring
     chart_ref: /root/monitoring/kube-prometheus-stack
     wait: true
     release_state: present
     values_files: "/root/monitoring/kube-prometheus-stack/values.yaml"
-    release_namespace: "monitoring"
+    release_namespace: monitoring
     atomic: true
     create_namespace: true
 
