@@ -30,7 +30,7 @@ fullnameOverride: ""
 serviceAccount:
   create: true
   annotations: {}
-  name:
+  name: fluentkang
 
 rbac:
   create: true
@@ -385,18 +385,16 @@ config:
         Match kube.*
         Merge_Log On
         Keep_Log Off
-        Kube_Tag_Prefix kube.var.log.containers
         K8S-Logging.Parser On
-        
-        K8S-Logging.Exclude On
+        K8S-Logging.Exclude Off
 
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   outputs: |
     [OUTPUT]
         Name es
-        Match kube.*
+        Match *
         Host kang-elastic-es-http.default
-        Logstash_Prefix fuck
+        Logstash_Prefix_Key $kubernetes['namespace_name']
         Logstash_Format On
         Retry_Limit False
         HTTP_User elastic
