@@ -1,0 +1,9 @@
+helm repo add elastic https://helm.elastic.co
+helm repo update
+helm pull  elastic/eck-operator --untar
+helm install elastic-operator elastic/eck-operator -n elastic-system --create-namespace
+kubectl get secret kang-elastic-es-elastic-user  -o go-template='{{.data.elastic | base64decode}}'
+
+echo 'vm.max_map_count=262144' >> /etc/sysctl.conf
+
+sysctl -p

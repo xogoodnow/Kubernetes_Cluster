@@ -12,7 +12,7 @@ https://github.com/prometheus-operator/kube-prometheus/blob/main/docs/kube-prome
 sed -e "s/- --bind-address=127.0.0.1/- --bind-address=0.0.0.0/" -i /etc/kubernetes/manifests/kube-controller-manager.yaml && sed -e "s/- --bind-address=127.0.0.1/- --bind-address=0.0.0.0/" -i /etc/kubernetes/manifests/kube-scheduler.yaml
 
 
-kubectl edit cm -n kube-system kube-proxy-config
+kubectl edit cm -n kube-system kube-proxy
 ...
 metricsBindAddress: 0.0.0.0:10249
 
