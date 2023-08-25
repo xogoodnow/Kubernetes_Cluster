@@ -23,3 +23,15 @@
     apply: true
     kubeconfig: /etc/kubernetes/admin.conf
 
+
+- name: The password  of kibana
+  shell: kubectl get secret kang-elastic-es-elastic-user -n elastic-system -o go-template='{{.data.elastic | base64decode}}'
+  register: elastic_password
+
+    
+- name: Printing the password to log in to kibana
+  debug:
+    var: elastic_password
+
+
+
