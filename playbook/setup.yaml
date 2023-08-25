@@ -102,19 +102,15 @@
         name: $PWD/roles/Cert_manager
       when: mode == 'master' and init_master == 'true'
 
-    - name: Change the binding address of services so prometheus would be able to scrape data
-      ansible.builtin.lineinfile:
-        path: "{{ item }}"
-        regexp: '--bind-address=127.0.0.1'
-        line: '--bind-address=0.0.0.0'
-      loop:
-        - /etc/kubernetes/manifests/kube-scheduler.yaml
-        - /etc/kubernetes/manifests/kube-controller-manager.yaml
-      when: mode == 'master'
 
     - name: Installing Monitoring for the cluster
       include_role:
-        name: $PWD/roles/Monitoring
+        name: $PWD/roles/Monitoring/Monitoring_Stack
+      when: mode == 'master' and init_master == 'true'
+
+    - name: Exposing the metrics for core components of the cluster
+      include_role:
+        name: $PWD/roles/Monitoring/Exposing_Metrics
       when: mode == 'master' and init_master == 'true'
 
 
