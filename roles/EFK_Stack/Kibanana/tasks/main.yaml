@@ -20,6 +20,7 @@
   kubernetes.core.k8s:
     src: "/root/Kibana/Kibana/kibana.yaml"
     state: present
+    namespace: elastic-system
     apply: true
     kubeconfig: /etc/kubernetes/admin.conf
 
