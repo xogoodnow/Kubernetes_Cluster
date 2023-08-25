@@ -51,13 +51,14 @@
   kubernetes.core.k8s:
     src: "/root/Elasticsearch/Elastic/Elastic.yaml"
     state: present
+    namespace: elastic-system
     apply: true
     kubeconfig: /etc/kubernetes/admin.conf
 
 
 - name: wait for the pods to be ready
   pause:
-    seconds: 20
+    seconds: 50
 
 
 
