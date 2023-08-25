@@ -114,7 +114,6 @@
       when: mode == 'master' and init_master == 'true'
 
 
-
 - name: Implement backup procedure for etcd
   become: true
   hosts: all
@@ -130,3 +129,24 @@
       when: mode == 'master'
 
 
+
+
+
+- name: Deploy EFK (Elastic, Fluentbit, Kibana) Stack on the cluster
+  become: true
+  hosts: all
+  tasks:
+    - name: Installing elastic
+      include_role:
+        name: $PWD/roles/EFK_Stack/ElasticSearch
+      when: mode == 'master' and init_master == 'true'
+
+    - name: Installing fluentbit
+      include_role:
+        name: $PWD/roles/EFK_Stack/Fluent_Bit
+      when: mode == 'master' and init_master == 'true'
+
+    - name: Installing kibana
+      include_role:
+        name: $PWD/roles/EFK_Stack/Kibanana
+      when: mode == 'master' and init_master == 'true'
