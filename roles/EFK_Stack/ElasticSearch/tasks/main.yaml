@@ -18,13 +18,6 @@
     src: files/
 
 
-- name: Increasing the maximum number of memory map areas a process may have
-  ansible.posix.sysctl:
-    name: vm.max_map_count
-    value: '262144'
-    state: present
-    reload: true
-
 - name: Create the namespace for Elasticsearch
   kubernetes.core.k8s:
     src: "/root/Elasticsearch/Elastic/Elastic_namespace.yaml"
