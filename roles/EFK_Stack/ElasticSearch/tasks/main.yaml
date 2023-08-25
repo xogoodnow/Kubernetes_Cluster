@@ -3,7 +3,7 @@
   ping:
     data: alive
 
-- name: Create a directory for Ingress_Controller
+- name: Create a directory for ElasticSearch
   file:
     path: /root/Elasticsearch
     owner: root
