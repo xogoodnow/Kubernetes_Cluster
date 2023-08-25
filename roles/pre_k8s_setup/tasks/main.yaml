@@ -35,3 +35,11 @@
 - name: Turn off swap
   command: swapoff -a
   when: swapison.changed
+
+- name: Increasing the maximum number of memory map areas a process may have
+  ansible.posix.sysctl:
+    name: vm.max_map_count
+    value: '262144'
+    state: present
+    reload: true
+
