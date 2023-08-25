@@ -3,20 +3,6 @@
   ping:
     data: alive
 
-- name: Create the namespace for Elasticsearch
-  kubernetes.core.k8s:
-    src: "/root/Elasticsearch/Elastic/Elastic_namespace.yaml"
-    state: present
-    apply: true
-    kubeconfig: /etc/kubernetes/admin.conf
-
-- name: Increasing the maximum number of memory map areas a process may have
-  ansible.posix.sysctl:
-    name: vm.max_map_count
-    value: '262144'
-    state: present
-    reload: true
-
 - name: Create a directory for Ingress_Controller
   file:
     path: /root/Elasticsearch
@@ -30,6 +16,21 @@
   copy:
     dest: /root/Elasticsearch/
     src: files/
+
+
+- name: Increasing the maximum number of memory map areas a process may have
+  ansible.posix.sysctl:
+    name: vm.max_map_count
+    value: '262144'
+    state: present
+    reload: true
+
+- name: Create the namespace for Elasticsearch
+  kubernetes.core.k8s:
+    src: "/root/Elasticsearch/Elastic/Elastic_namespace.yaml"
+    state: present
+    apply: true
+    kubeconfig: /etc/kubernetes/admin.conf
 
 - name: Verify if helm is installed on the system
   shell:
