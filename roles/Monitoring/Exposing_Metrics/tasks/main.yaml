@@ -1,0 +1,29 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Change the binding address of services so prometheus would be able to scrape data
+  ansible.builtin.lineinfile:
+    path: "{{ item }}"
+    regexp: '--bind-address=127.0.0.1'
+    line: '--bind-address=0.0.0.0'
+  loop:
+    - /etc/kubernetes/manifests/kube-scheduler.yaml
+    - /etc/kubernetes/manifests/kube-controller-manager.yaml
+  when: mode == 'master'
+
+
+- name: Edit kube-proxy ConfigMap to expose metrics
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: kube-proxy
+        namespace: kube-system
+      data:
+        metricsBindAddress: "0.0.0.0:10249"
+      when: mode == 'master' and init_master == 'true'
+
