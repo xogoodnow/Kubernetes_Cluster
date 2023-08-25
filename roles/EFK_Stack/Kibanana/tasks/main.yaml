@@ -25,8 +25,9 @@
     kubeconfig: /etc/kubernetes/admin.conf
 
 
-- name: The password  of kibana
-  shell: kubectl get secret kang-elastic-es-elastic-user -n elastic-system -o go-template='{{.data.elastic | base64decode}}'
+- name: The password of kibana
+  command:
+    cmd: !unsafe "kubectl get secret kang-elastic-es-elastic-user -n elastic-system -o go-template='{{.data.elastic | base64decode}}'"
   register: elastic_password
 
 

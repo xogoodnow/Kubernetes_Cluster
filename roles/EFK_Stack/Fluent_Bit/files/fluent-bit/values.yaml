@@ -393,12 +393,12 @@ config:
     [OUTPUT]
         Name es
         Match *
-        Host elastic-system.kang-elastic-es-http.cluster.local
+        Host kang-elastic-es-http.elastic-system
         Logstash_Prefix_Key $kubernetes['namespace_name']
         Logstash_Format On
         Retry_Limit False
         HTTP_User elastic
-        HTTP_Passwd Q36WMBc851R4Jx5HQW5Qm53I
+        HTTP_Passwd 6A23806WM4fVLDuLmn15hU8e
         tls On
         tls.verify Off
         Replace_Dots    On
@@ -408,12 +408,12 @@ config:
     [OUTPUT]
         Name es
         Match host.*
-        Host elastic-system.kang-elastic-es-http.cluster.local
+        Host kang-elastic-es-http.elastic-system
         Logstash_Format On
         Logstash_Prefix node
         Retry_Limit False
         HTTP_User elastic
-        HTTP_Passwd Q36WMBc851R4Jx5HQW5Qm53I
+        HTTP_Passwd 6A23806WM4fVLDuLmn15hU8e
         tls On
         tls.verify Off
         Replace_Dots    On
