@@ -24,3 +24,15 @@
 #- name: Make kang-sc the default storage class for all PVCs
 #  shell: kubectl patch storageclass kang-sc -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 #  failed_when: false
+
+- name: Make kang-sc the default storage class for all PVCs
+  kubernetes.core.k8s:
+    state: patched
+    definition:
+      apiVersion: storage.k8s.io/v1
+      kind: StorageClass
+      metadata:
+        name: kang-sc
+        annotations:
+          storageclass.kubernetes.io/is-default-class: "true"
+  ignore_errors: true
