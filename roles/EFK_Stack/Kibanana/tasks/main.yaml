@@ -1,0 +1,25 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+- name: Create a directory for Kibana
+  file:
+    path: /root/Kibana
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: Copy the files to the directory
+  copy:
+    dest: /root/Kibana/
+    src: files/
+
+- name: Create the namespace for Kibana
+  kubernetes.core.k8s:
+    src: "/root/Kibana/Kibana/kibana.yaml"
+    state: present
+    apply: true
+    kubeconfig: /etc/kubernetes/admin.conf
+
