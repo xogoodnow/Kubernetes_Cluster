@@ -28,3 +28,12 @@
         tls.verify Off
         Replace_Dots    On
         Suppress_Type_Name On
+
+
+
+#        Kube_URL https://kubernetes.default.svc:443
+#        Kube_Token_File /var/run/secrets/kubernetes.io/serviceaccount/token
+#        Kube_CA_File /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+#        tls.verify off
+#        Labels on
+#        Annotations on
