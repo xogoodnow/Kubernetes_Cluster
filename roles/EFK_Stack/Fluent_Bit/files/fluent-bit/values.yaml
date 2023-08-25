@@ -393,7 +393,7 @@ config:
     [OUTPUT]
         Name es
         Match *
-        Host kang-elastic-es-http.default
+        Host elastic-system.kang-elastic-es-http.cluster.local
         Logstash_Prefix_Key $kubernetes['namespace_name']
         Logstash_Format On
         Retry_Limit False
@@ -408,7 +408,7 @@ config:
     [OUTPUT]
         Name es
         Match host.*
-        Host kang-elastic-es-http.default
+        Host elastic-system.kang-elastic-es-http.cluster.local
         Logstash_Format On
         Logstash_Prefix node
         Retry_Limit False

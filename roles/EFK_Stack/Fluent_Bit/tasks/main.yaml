@@ -1,0 +1,54 @@
+---
+- name: check connectivity
+  ping:
+    data: alive
+
+
+
+- name: Create a directory for Fluentbit
+  file:
+    path: /root/FluentBit
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+
+- name: Copy the files to the directory
+  copy:
+    dest: /root/FluentBit/
+    src: files/
+
+
+- name: Create the namespace for Fluentbit
+  kubernetes.core.k8s:
+    src: "/root/FluentBit/Fluentbit_namespace.yaml"
+    state: present
+    apply: true
+    kubeconfig: /etc/kubernetes/admin.conf
+
+
+
+- name: Verify if helm is installed on the system
+  shell:
+    cmd: helm version
+  register: helm_check
+  failed_when: "'version.BuildInfo' not in helm_check.stdout"
+  changed_when: false
+
+- name: Installing Fluentbit on the cluster
+  kubernetes.core.helm:
+    name: fluentbit
+    chart_ref: /root/FluentBit/fluent-bit
+    release_state: present
+    values_files: "/root/FluentBit/fluent-bit/values.yaml"
+    release_namespace: "fluentbit"
+    create_namespace: true
+
+
+- name: wait for the probes to be ready
+  pause:
+    seconds: 40
+
+
+
