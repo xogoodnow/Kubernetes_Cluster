@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kang-kibana
+  namespace: elastic-system
+  annotations:
+    cert-manager.io/cluster-issuer: prod-issuer
+    acme.cert-manager.io/http01-edit-in-place: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - kibana.oblivionone.com
+    secretName: kang-ingress-secret
+  rules:
+  - host: kibana.oblivionone.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kang-kibana-kb-http
+            port:
+              number: 5601
+
