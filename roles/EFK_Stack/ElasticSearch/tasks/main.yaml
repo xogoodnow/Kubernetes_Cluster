@@ -34,7 +34,7 @@
 
 - name: Installing Elastic search on the cluster
   kubernetes.core.helm:
-    name: elastic-operator
+    name: kang-elastic
     chart_ref: /root/Elasticsearch/Elastic/eck-operator
     release_state: present
     values_files: "/root/Elasticsearch/Elastic/eck-operator/values.yaml"
