@@ -18,42 +18,18 @@
     src: files/
     dest: /etc/kubernetes/
 
-
-
-- name: Add lines to command section
-  blockinfile:
+- name: Delete The original kube-api config file
+  file:
     path: /etc/kubernetes/manifests/kube-apiserver.yaml
-    insertafter: '\- kube-apiserver'
-    block: |
-      - --audit-policy-file=/etc/kubernetes/audit-policy.yaml
-      - --audit-log-path=/var/log/kubernetes/audit/audit.log
+    state: absent
 
-- name: Add volume mounts
-  blockinfile:
-    path: /etc/kubernetes/manifests/kube-apiserver.yaml
-    insertbefore: 'hostNetwork: true'
-    block: |
-      volumeMounts:
-        - mountPath: /etc/kubernetes/audit-policy.yaml
-          name: audit
-          readOnly: true
-        - mountPath: /var/log/kubernetes/audit/
-          name: audit-log
-          readOnly: false
 
-- name: Add volumes
-  blockinfile:
-    path: /etc/kubernetes/manifests/kube-apiserver.yaml
-    insertafter: 'volumes:'
-    block: |
-      - name: audit
-        hostPath:
-          path: /etc/kubernetes/audit-policy.yaml
-          type: File
-      - name: audit-log
-        hostPath:
-          path: /var/log/kubernetes/audit/
-          type: DirectoryOrCreate
+
+- name: Render the new kubeapi file
+  template:
+    src: templates/kube-apiserver.yaml.j2
+    dest: /etc/kubernetes/manifests/kube-apiserver.yaml
+
 
 - name: Restart kubelet
   systemd:
@@ -63,6 +39,53 @@
 - name: wait for api server to come back up
   pause:
     seconds: 20
+
+
+
+
+#- name: Add lines to command section
+#  blockinfile:
+#    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+#    insertafter: '\- kube-apiserver'
+#    block: |
+#      - --audit-policy-file=/etc/kubernetes/audit-policy.yaml
+#      - --audit-log-path=/var/log/kubernetes/audit/audit.log
+
+#- name: Add volume mounts
+#  blockinfile:
+#    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+#    insertbefore: 'hostNetwork: true'
+#    block: |
+#      volumeMounts:
+#        - mountPath: /etc/kubernetes/audit-policy.yaml
+#          name: audit
+#          readOnly: true
+#        - mountPath: /var/log/kubernetes/audit/
+#          name: audit-log
+#          readOnly: false
+##
+#- name: Add volumes
+#  blockinfile:
+#    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+#    insertafter: 'volumes:'
+#    block: |
+#      - name: audit
+#        hostPath:
+#          path: /etc/kubernetes/audit-policy.yaml
+#          type: File
+#      - name: audit-log
+#        hostPath:
+#          path: /var/log/kubernetes/audit/
+#          type: DirectoryOrCreate
+#
+#- name: Restart kubelet
+#  systemd:
+#    name: kubelet
+#    state: restarted
+#
+#- name: wait for api server to come back up
+#  pause:
+#    seconds: 20
 
 
 
