@@ -1,0 +1,24 @@
+Add follwoing parameters to kube-api manifest
+ - --audit-policy-file=/etc/kubernetes/audit-policy.yaml
+  - --audit-log-path=/var/log/kubernetes/audit/audit.log
+
+volumeMounts:
+  - mountPath: /etc/kubernetes/audit-policy.yaml
+    name: audit
+    readOnly: true
+  - mountPath: /var/log/kubernetes/audit/
+    name: audit-log
+    readOnly: false
+
+volumes:
+- name: audit
+  hostPath:
+    path: /etc/kubernetes/audit-policy.yaml
+    type: File
+
+- name: audit-log
+  hostPath:
+    path: /var/log/kubernetes/audit/
+    type: DirectoryOrCreate
+
+systemctl restart kubelet

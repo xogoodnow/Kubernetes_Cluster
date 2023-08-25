@@ -1,0 +1,69 @@
+---
+- name: Check connectivity
+  ping:
+    data: alive
+
+
+- name: Create the directory for audit log and audit log policy
+  file:
+    path: /var/log/kubernetes/audit/
+    state: directory
+    mode: 0744
+    owner: root
+    group: root
+
+
+- name: Copy the audit log policy on the master
+  copy:
+    src: files/
+    dest: /etc/kubernetes/
+
+
+
+- name: Add lines to command section
+  blockinfile:
+    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+    insertafter: '\- kube-apiserver'
+    block: |
+      - --audit-policy-file=/etc/kubernetes/audit-policy.yaml
+      - --audit-log-path=/var/log/kubernetes/audit/audit.log
+
+- name: Add volume mounts
+  blockinfile:
+    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+    insertbefore: 'hostNetwork: true'
+    block: |
+      volumeMounts:
+        - mountPath: /etc/kubernetes/audit-policy.yaml
+          name: audit
+          readOnly: true
+        - mountPath: /var/log/kubernetes/audit/
+          name: audit-log
+          readOnly: false
+
+- name: Add volumes
+  blockinfile:
+    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+    insertafter: 'volumes:'
+    block: |
+      - name: audit
+        hostPath:
+          path: /etc/kubernetes/audit-policy.yaml
+          type: File
+      - name: audit-log
+        hostPath:
+          path: /var/log/kubernetes/audit/
+          type: DirectoryOrCreate
+
+- name: Restart kubelet
+  systemd:
+    name: kubelet
+    state: restarted
+
+- name: wait for api server to come back up
+  pause:
+    seconds: 20
+
+
+
+
