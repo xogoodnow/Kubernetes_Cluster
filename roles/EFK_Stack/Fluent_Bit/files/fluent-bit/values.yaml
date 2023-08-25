@@ -276,7 +276,36 @@ podDisruptionBudget:
 
 nodeSelector: {}
 
-tolerations: []
+tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+    - operator: Exists
+      effect: NoSchedule
+    - operator: Exists
+      effect: NoExecute
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+    - key: node.kubernetes.io/disk-pressure
+      operator: Exists
+      effect: NoSchedule
+    - key: node.kubernetes.io/memory-pressure
+      operator: Exists
+      effect: NoSchedule
+    - key: node.kubernetes.io/pid-pressure
+      operator: Exists
+      effect: NoSchedule
+    - key: node.kubernetes.io/unschedulable
+      operator: Exists
+      effect: NoSchedule
+    - key: node.kubernetes.io/network-unavailable
+      operator: Exists
+      effect: NoSchedule
+
+
 
 affinity: {}
 
@@ -373,6 +402,15 @@ config:
         Skip_Long_Lines off
 
     [INPUT]
+        Name tail
+        Path /var/log/kubernetes/audit/audit.log
+        Tag audit.*
+        parser kangaudit
+        Mem_Buf_Limit 500KB
+        Skip_Long_Lines off
+
+
+    [INPUT]
         Name systemd
         Tag host.*
         Systemd_Filter _SYSTEMD_UNIT=kubelet.service
@@ -388,11 +426,13 @@ config:
         K8S-Logging.Parser On
         K8S-Logging.Exclude Off
 
+
+
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   outputs: |
     [OUTPUT]
         Name es
-        Match *
+        Match kube.*
         Host kang-elastic-es-http.elastic-system
         Logstash_Prefix_Key $kubernetes['namespace_name']
         Logstash_Format On
@@ -404,6 +444,22 @@ config:
         Replace_Dots    On
         Suppress_Type_Name On
     
+
+    [OUTPUT]
+        Name es
+        Match audit.*
+        Host kang-elastic-es-http.elastic-system
+        Logstash_Format On
+        Logstash_Prefix audit
+        Retry_Limit False
+        HTTP_User elastic
+        HTTP_Passwd 7a6T3Np9n50U1X3qFYPu0E7A
+        tls On
+        tls.verify Off
+        Replace_Dots    On
+        Suppress_Type_Name On
+
+
 
     [OUTPUT]
         Name es
@@ -431,6 +487,13 @@ config:
         Time_Keep Off
         Time_Key time
         Time_Format %Y-%m-%dT%H:%M:%S.%L
+
+    [PARSER]
+        Name kangaudit
+        Format json
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+
 
   # This allows adding more files with arbitary filenames to /fluent-bit/etc/conf by providing key/value pairs.
   # The key becomes the filename, the value becomes the file content.
