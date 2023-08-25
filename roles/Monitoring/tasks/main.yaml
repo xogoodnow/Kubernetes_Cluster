@@ -36,6 +36,14 @@
 
 
 
+#    - name: Change the binding address of services so prometheus would be able to scrape data
+#      shell:
+#        cmd: "{{ item }}"
+#      with_items:
+#        - sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-scheduler.yaml
+#        - sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-controller-manager.yaml
+#      when: mode == 'master'
+#
 
 
 
