@@ -1,4 +1,9 @@
 ---
+- name: Check for connectivity
+  ping:
+    data: alive
+
+
 - name: pull k8s images
   command:
     cmd: kubeadm config images pull --v=5
