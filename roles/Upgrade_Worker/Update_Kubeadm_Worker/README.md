@@ -1,2 +1,8 @@
-This role is based on the instructions in  in the following doc
-https://v1-26.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+## What this role does
+* Checks connectivity before running tasks
+* Updating repo
+* Unholding kubeadm so it could be updated
+* Updating kubeadm to 1.26
+* Marking kubeadm on hold
+* Verify if upgrade is compatible with current configuration
+* Upgrading kubeadm
