@@ -119,7 +119,7 @@ kubectl get elasticsearch -n elastic-system
 
 
 
-* To Clean up everything (including server)
+* To Clean up everything (including the nodes themselvs)
 ``` bash
 terraform destroy
 ```
