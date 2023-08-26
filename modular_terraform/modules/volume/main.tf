@@ -8,6 +8,6 @@ data "hcloud_server" "workers" {
 resource "hcloud_volume" "worker_volumes" {
   count = length(data.hcloud_server.workers)
   name  = "worker-${count.index}-volume"
-  size  = 100
+  size  = 200
   server_id = data.hcloud_server.workers[count.index].id
 }
