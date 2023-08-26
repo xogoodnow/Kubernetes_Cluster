@@ -63,6 +63,8 @@
     name: "{{ ansible_hostname }}"
 
 - name: Wait for k8s to re utilize
+  pause:
+    seconds: 20
 
 
 
