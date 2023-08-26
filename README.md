@@ -56,6 +56,8 @@
 * Terraform is limited to Hetzner
 * Communication is over public network (Encrypted but still vulnerable to Zero-day exploits since its observable) 
   * Firewall policies minimize the observable scope
+* Since updating procedure on k8s is differnt from version to version, currently, only update form V1.25 to 1.26 is supported
+
 
 
 
