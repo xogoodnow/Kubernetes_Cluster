@@ -1,4 +1,9 @@
 ---
+- name: Checking the connection
+  ping:
+    data: alive
+
+
 - name: Download the GPG key of helm
   get_url:
     url: https://baltocdn.com/helm/signing.asc
