@@ -23,7 +23,7 @@
 | Elaticsearch Chart: 2.9.0 [Docs](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-install-helm.html)                   | Log Analysis                            | `Loki`                                          | 1. More rigorious indexing<br/>2. Loki needs more R&D                                                                                                                                                                                                          |
 | Kube Prometheus Stack [Docs](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack)      | Monitoring                              | `Prometheus`+`Grafana`                          | 1. One single chart (so easier to manage and setup)<br/>2. Preconfigured for k8s components<br/>                                                                                                                                                               |
 | Haproxy latest [Docs](https://hub.docker.com/_/haproxy/)                                                                      | Control plain loadbalancer              | `CDN`                                           | 1. Easier to setup<br/> 2. Custome health check rules<br/>3. Since cluster is initiated on domain, CDN can be used too                                                                                                                                         |
-| Calico 3.26.1[Docs](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises)           | Container Network Interface             | `Flannel` `Cillium` `Canal`                      | 1. Support for network policy<br/>2. Multi AZ support<br/>3. Quite easy to setup<br/>4. Great documentation and community<br/>5. eFFICIENT l3 NETWORK<br/>6. Configureable BGP (bird agent)                                                                    |
+| Calico 3.26.1 [Docs](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises)          | Container Network Interface             | `Flannel` `Cillium` `Canal`                      | 1. Support for network policy<br/>2. Multi AZ support<br/>3. Quite easy to setup<br/>4. Great documentation and community<br/>5. eFFICIENT l3 NETWORK<br/>6. Configureable BGP (bird agent)                                                                    |
 | Kibana 8.9.1 [Docs](https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-deploy-kibana.html)                               | Log Visualizer                          | `Grafana` `Datadog`                             | 1. Free (comparing to datadog which is awsome)<br/>2. Customized specifically for ealstic search so they are much more compatible<br/>3. Easier to setup<br/>4. Very light weight                                                                              |
 
 
@@ -79,7 +79,6 @@ terraform plan
 terraform apply
 
 ```
-![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/terraform_apply.gif)
 
 > **Note**
 > Add haproxy ip as the A record for control plain record
@@ -124,3 +123,4 @@ kubectl get elasticsearch -n elastic-system
 terraform destroy
 ```
 ![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/terraform_destroy.gif)
+
