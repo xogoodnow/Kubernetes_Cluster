@@ -1,4 +1,9 @@
 ---
+- name: Checking connectivity
+  ping:
+    data: alive
+
+
 - name: Create a directory for openebs
   file:
     path: /root/openebs_config
@@ -53,7 +58,7 @@
 
 - name: Pause for the controller to be set up
   pause:
-    seconds: 20
+    seconds: 30
 
 
 
