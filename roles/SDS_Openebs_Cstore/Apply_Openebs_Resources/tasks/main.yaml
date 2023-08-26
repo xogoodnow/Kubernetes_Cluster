@@ -1,4 +1,9 @@
 ---
+- name: Checking for connectivity
+  ping:
+    data: alive
+
+
 
 - name: Apply The cspc for Openebs
   kubernetes.core.k8s:
@@ -10,7 +15,7 @@
 
 - name: Waiting for the operator so it would finish up its set up
   pause:
-    seconds: 20
+    seconds: 40
 
 
 - name: Apply the storage class for the cluster
