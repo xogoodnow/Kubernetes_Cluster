@@ -79,6 +79,7 @@ terraform plan
 terraform apply
 
 ```
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/terraform_apply.gif)
 
 > **Note**
 > Add haproxy ip as the A record for control plain record
