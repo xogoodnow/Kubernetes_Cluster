@@ -1,4 +1,7 @@
 ---
+- name: Check connectivity
+  ping:
+    data: alive
 
 - name: Create a directory for cert manager
   file:
