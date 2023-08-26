@@ -101,7 +101,9 @@ terraform apply
 
 
 * Check if Elasticsearch is green
-
+``` bash
+kubectl get elasticsearch -n elastic-system
+```
 ![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/elasticsearch_green.gif)
 
 
@@ -118,5 +120,7 @@ terraform apply
 
 
 * To Clean up everything (including server)
-
+``` bash
+terraform destroy
+```
 ![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/terraform_destroy.gif)
