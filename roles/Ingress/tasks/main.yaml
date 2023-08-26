@@ -1,4 +1,8 @@
 ---
+- name: Checking connection
+  ping:
+    data: alive
+
 - name: Create a directory for Ingress_Controller
   file:
     path: /root/ingress_controller
