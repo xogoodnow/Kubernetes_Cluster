@@ -146,3 +146,19 @@
       include_role:
         name: $PWD/roles/EFK_Stack/Kibanana
       when: mode == 'master' and init_master == 'true'
+
+
+- name: Make the cluster operation ready
+  become: true
+  serial: 1
+  hosts: all
+  tasks:
+    - name: Enabling audit logging
+      include_role:
+        name: $PWD/roles/Audit_Logging
+      when: mode == 'master'
+
+
+
+
+
