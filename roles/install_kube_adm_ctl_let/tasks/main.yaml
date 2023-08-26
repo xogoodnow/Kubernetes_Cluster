@@ -1,4 +1,7 @@
 ---
+- name: Checking for connectivity
+  ping:
+    data: alive
 
 - name: craete the keyring directory for google gpg key
   file:
