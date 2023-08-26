@@ -113,7 +113,7 @@ kubectl get elasticsearch -n elastic-system
 
 
 
-* Check if fluentbit works
+* Check if Fluentbit works
 
 ![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/Fluentbit_Works.gif)
 
