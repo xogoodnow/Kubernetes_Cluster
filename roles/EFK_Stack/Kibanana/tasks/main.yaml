@@ -16,7 +16,7 @@
     dest: /root/Kibana/
     src: files/
 
-- name: Create the namespace for Kibana
+- name: Create Kibana
   kubernetes.core.k8s:
     src: "/root/Kibana/Kibana/kibana.yaml"
     state: present
@@ -35,5 +35,12 @@
   debug:
     var: elastic_password
 
+- name: Create ingress for kibana
+  kubernetes.core.k8s:
+    src: "/root/Kibana/Kibana_Ingress.yaml"
+    state: present
+    namespace: elastic-system
+    apply: true
+    kubeconfig: /etc/kubernetes/admin.conf
 
 
