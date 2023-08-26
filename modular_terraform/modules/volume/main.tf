@@ -1,6 +1,6 @@
 
 data "hcloud_server" "workers" {
-  count = 3 
+  count = 4
   name = "worker-${count.index}"
 
 }

@@ -10,7 +10,7 @@ resource "hcloud_server" "master" {
 
 
 resource "hcloud_server" "worker" {
-  count = 3
+  count = 4
   name         = "worker-${count.index}"
   image        = var.image_name
   server_type  = "cpx31"
