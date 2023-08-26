@@ -60,6 +60,9 @@
 - name: Uncordon the node
   kubernetes.core.k8s_drain:
     state: uncordon
+    delete_options:
+      delete_emptydir_data: true
+      force: yes
     name: "{{ ansible_hostname }}"
 
 - name: Wait for k8s to re utilize
