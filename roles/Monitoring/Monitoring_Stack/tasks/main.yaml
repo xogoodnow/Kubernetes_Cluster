@@ -1,4 +1,9 @@
 ---
+- name: Checking connectivity
+  ping:
+    data: alive
+
+
 - name: Create a directory for monitoring
   file:
     path: /root/monitoring
