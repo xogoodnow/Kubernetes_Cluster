@@ -1,4 +1,8 @@
 ---
+- name: Check for connectivity
+  ping:
+    data: alive
+
 - name: extract the certificate key
   shell: "kubeadm init phase upload-certs --upload-certs | grep -vw -e certificate -e Namespace | awk '{print $NF}'"
   delegate_to: "{{ hostvars[groups['kang'][0]]['ansible_host'] }}"
