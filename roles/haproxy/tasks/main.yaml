@@ -1,4 +1,7 @@
 ---
+- name: Check for connectivity
+  ping:
+    data: alive
 - name: install required packages
   apt:
     pkg:
