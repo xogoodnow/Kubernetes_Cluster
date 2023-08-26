@@ -1,4 +1,8 @@
 ---
+- name: Checking for connectivity
+  ping:
+    data: alive
+
 - name: create keyring directory
   file:
     path: /etc/apt/trusted.gpg.d/
