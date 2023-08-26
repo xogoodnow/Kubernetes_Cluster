@@ -1,5 +1,7 @@
 ---
-
+- name: Check for connectivity
+  ping:
+    data: alive
 - name: Create a directory for the manifest
   file:
     path: /root/calico_manifests
@@ -30,7 +32,7 @@
 
 - name: Waiting for the operator so it would finish up its set up
   pause:
-    seconds: 100
+    seconds: 40
 
 
 - name: apply manifest Calico custom-resources
@@ -39,5 +41,8 @@
     state: present
     kubeconfig: /etc/kubernetes/admin.conf
 
+- name: Waiting for the operator so it would finish up its set up
+  pause:
+    seconds: 40
 
 
