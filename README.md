@@ -60,5 +60,37 @@
 
 
 
+## Work flow
+* Run the following command and check if there are any problems with terraform
+``` bash
+terraform plan
+```
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/terraform_plan.gif)
 
+* Apply terraform modules and get started
+``` bash
+terraform apply
+
+```
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/terraform_apply.gif)
+
+> **Note**
+> Add haproxy ip as the A record for control plain record
+> Add worker IP addreses for Grafana, Prometheus and kibana
+
+* Check if Prometheus works
+* > **Note**
+> Check if all metrics are exposed properly
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/Prometheus_works.gif)
+
+
+* Check if Grafana works
+* > **Note**
+> All dashboard are provisioned in config map
+> To add custom dashbaord on load, add it to dashbaord as a .json file. It would automatically be loaded to Grafana
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/Grafana_works.gif)
+
+
+* Check if Kibana works
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/kibana_works.gif)
 
