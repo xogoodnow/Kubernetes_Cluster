@@ -14,14 +14,14 @@
 
 - name: Wait for the node to be drained
   pause:
-    seconds: 20
+    seconds: 30
 
 - name: update repos
   apt:
     update_cache: yes
     allow_downgrade: yes
 
-- name: Unhold kubeadm for updating
+- name: Unhold kubectl and kubelet for updating
   dpkg_selections:
     name: "{{ item }}"
     selection: install
@@ -29,7 +29,7 @@
     - kubelet
     - kubectl
 
-- name: Update kubeadm version
+- name: Update kubectl and kubelet version
   apt:
     name: "{{ item }}"
     state: present
@@ -62,6 +62,7 @@
     state: uncordon
     name: "{{ ansible_hostname }}"
 
+- name: Wait for k8s to re utilize
 
 
 
