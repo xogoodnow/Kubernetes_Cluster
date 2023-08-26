@@ -42,5 +42,4 @@
     value: '262144'
     state: present
     reload: true
-  when: mode == 'worker'
 
