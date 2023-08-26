@@ -1,4 +1,9 @@
 ---
+- name: check for connectivity
+  ping:
+    data: alive
+
+
 - name: Generate a new token
   command: kubeadm token generate
   delegate_to: "{{ hostvars[groups['kang'][0]]['ansible_host'] }}"
