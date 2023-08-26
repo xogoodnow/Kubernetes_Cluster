@@ -61,6 +61,13 @@
 
 
 ## Work flow
+* Run the following command for terraform to install dependencies and create the lock file
+``` bash
+terraform init
+```
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/terraform_init.gif)
+
+
 * Run the following command and check if there are any problems with terraform
 ``` bash
 terraform plan
@@ -88,9 +95,28 @@ terraform apply
 * > **Note**
 > All dashboard are provisioned in config map
 > To add custom dashbaord on load, add it to dashbaord as a .json file. It would automatically be loaded to Grafana
-![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/Grafana_works.gif)
+> 
+> 
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/grafana_works.gif)
+
+
+* Check if Elasticsearch is green
+
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/elasticsearch_green.gif)
 
 
 * Check if Kibana works
+
 ![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/kibana_works.gif)
 
+
+
+* Check if fluentbit works
+
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/Fluentbit_Works.gif)
+
+
+
+* To Clean up everything (including server)
+
+![image](https://thebattleofisengard.s3.ir-thr-at1.arvanstorage.ir/terraform_destroy.gif)
