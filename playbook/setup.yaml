@@ -87,10 +87,6 @@
   serial: 1
   hosts: all
   tasks:
-    - name: Automatic ETCD backup on S3
-      include_role:
-        name: $PWD/roles/Automate_Etcd_Backup_Setup/Backup_Cron_Job
-      when: mode == 'master'
 
     - name: Installing ingress controller
       include_role:
@@ -123,11 +119,11 @@
         name: $PWD/roles/Automate_Etcd_Backup_Setup/Configure_S3cmd
       when: mode == 'master'
 
+
     - name: Adding a cron job to backup ETCD
       include_role:
         name: $PWD/roles/Automate_Etcd_Backup_Setup/Backup_Cron_Job
       when: mode == 'master'
-
 
 
 
