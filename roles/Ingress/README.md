@@ -1,4 +1,4 @@
-## Known issues
+## What this task does
 * Checks connectivity before running tasks
 * Creating a directory for ingress helm chart
 * Copy the helm chart to the directory
