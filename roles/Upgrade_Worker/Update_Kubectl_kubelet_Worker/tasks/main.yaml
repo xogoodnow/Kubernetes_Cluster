@@ -9,8 +9,10 @@
     state: drain
     name: "{{ ansible_hostname }}"
     delete_options:
-      ignore_daemonsets: true
       delete_emptydir_data: true
+      ignore_daemonsets: true
+      disable_eviction: true
+      terminate_grace_period: 20
 
 - name: Wait for the node to be drained
   pause:
@@ -60,14 +62,11 @@
 - name: Uncordon the node
   kubernetes.core.k8s_drain:
     state: uncordon
-    delete_options:
-      delete_emptydir_data: true
-      force: yes
     name: "{{ ansible_hostname }}"
 
 - name: Wait for k8s to re utilize
   pause:
-    seconds: 20
+    seconds: 30
 
 
 
