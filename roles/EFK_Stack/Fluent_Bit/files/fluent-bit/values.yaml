@@ -403,7 +403,7 @@ config:
 
     [INPUT]
         Name tail
-        Path /var/log/kubernetes/audit/audit.log
+        Path /var/log/kubernetes/audit/audit*
         Tag audit.*
         parser kangaudit
         Mem_Buf_Limit 500KB
@@ -438,7 +438,7 @@ config:
         Logstash_Format On
         Retry_Limit False
         HTTP_User elastic
-        HTTP_Passwd 91CVYeu7Ml13f9o81OtJ7v2D
+        HTTP_Passwd 0V8i3z04635lVSLR2HJ3tFCw
         tls On
         tls.verify Off
         Replace_Dots    On
@@ -453,7 +453,7 @@ config:
         Logstash_Prefix audit
         Retry_Limit False
         HTTP_User elastic
-        HTTP_Passwd 91CVYeu7Ml13f9o81OtJ7v2D
+        HTTP_Passwd 0V8i3z04635lVSLR2HJ3tFCw
         tls On
         tls.verify Off
         Replace_Dots    On
@@ -469,7 +469,7 @@ config:
         Logstash_Prefix node
         Retry_Limit False
         HTTP_User elastic
-        HTTP_Passwd 91CVYeu7Ml13f9o81OtJ7v2D
+        HTTP_Passwd 0V8i3z04635lVSLR2HJ3tFCw
         tls On
         tls.verify Off
         Replace_Dots    On
