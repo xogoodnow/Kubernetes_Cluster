@@ -24,3 +24,5 @@ https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeproxydown/
 kill coredns (for some reason it solves the problem)
 
 
+PWD='../' ANSIBLE_HOST_KEY_CHECKING=False ansible -i inventory.yaml all -m shell -a " sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-scheduler.yaml" --private-key sshkey/private_key.pem
+PWD='../' ANSIBLE_HOST_KEY_CHECKING=False ansible -i inventory.yaml all -m shell -a " sed -e 's/--bind-address=127.0.0.1/--bind-address=0.0.0.0/' -i /etc/kubernetes/manifests/kube-controller-manager.yaml" --private-key sshkey/private_key.pem
