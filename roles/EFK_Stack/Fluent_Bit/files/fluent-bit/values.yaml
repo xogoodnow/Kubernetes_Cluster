@@ -438,7 +438,7 @@ config:
         Logstash_Format On
         Retry_Limit False
         HTTP_User elastic
-        HTTP_Passwd 0V8i3z04635lVSLR2HJ3tFCw
+        HTTP_Passwd 7833LHgfUHjtoC329X4X78Vp
         tls On
         tls.verify Off
         Replace_Dots    On
@@ -453,7 +453,7 @@ config:
         Logstash_Prefix audit
         Retry_Limit False
         HTTP_User elastic
-        HTTP_Passwd 0V8i3z04635lVSLR2HJ3tFCw
+        HTTP_Passwd 7833LHgfUHjtoC329X4X78Vp
         tls On
         tls.verify Off
         Replace_Dots    On
@@ -469,7 +469,7 @@ config:
         Logstash_Prefix node
         Retry_Limit False
         HTTP_User elastic
-        HTTP_Passwd 0V8i3z04635lVSLR2HJ3tFCw
+        HTTP_Passwd 7833LHgfUHjtoC329X4X78Vp
         tls On
         tls.verify Off
         Replace_Dots    On
