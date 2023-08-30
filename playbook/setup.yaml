@@ -107,7 +107,7 @@
     - name: Exposing the metrics for core components of the cluster
       include_role:
         name: $PWD/roles/Monitoring/Exposing_Metrics
-      when: mode == 'master' and init_master == 'true'
+      when: mode == 'master'
 
 
 - name: Implement backup procedure for etcd
