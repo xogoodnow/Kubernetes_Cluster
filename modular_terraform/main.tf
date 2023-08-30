@@ -22,16 +22,17 @@ module "volume" {
 
 }
 
-#module "firewall" {
-#  source = "./modules/firewall"
-#  hcloud_token = var.hcloud_token
-#  depends_on = [module.servers]
-#}
+
 
 module "k8s" {
   source = "./modules/k8s"
   hcloud_token = var.hcloud_token
-  #depends_on = [module.firewall]
+  depends_on = [module.volume]
 
 }
 
+module "firewall" {
+  source = "./modules/firewall"
+  hcloud_token = var.hcloud_token
+  depends_on = [module.k8s]
+}
