@@ -6,11 +6,11 @@
 - name: Change the binding address of services so prometheus would be able to scrape data
   ansible.builtin.lineinfile:
     path: "{{ item }}"
-    regexp: '    - --bind-address=127.0.0.1'
+    regexp: '- --bind-address=127.0.0.1'
     line: '    - --bind-address=0.0.0.0'
-  loop:
-    - /etc/kubernetes/manifests/kube-scheduler.yaml
-    - /etc/kubernetes/manifests/kube-controller-manager.yaml
+  with_items:
+    - "/etc/kubernetes/manifests/kube-scheduler.yaml"
+    - "/etc/kubernetes/manifests/kube-controller-manager.yaml"
   when: mode == 'master'
 
 
