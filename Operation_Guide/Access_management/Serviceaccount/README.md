@@ -4,7 +4,7 @@
 ```bash
 kubectl apply -f USERNAME_Namespace.yaml
 ```
-# Create a service account
+# Create a service accoun
 #### You can apply the "USERNAME_Serviceaccount.yaml" manifest
 ```bash
 kubectl apply -f USERNAME_Serviceaccount.yaml
