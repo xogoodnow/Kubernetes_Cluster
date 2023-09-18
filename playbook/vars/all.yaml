@@ -2,9 +2,9 @@ etcd_backup_bucket: kangetcdbackup
 haproxy_version: latest
 pod_network_cidr: 192.168.0.0/16
 control_plane_endpoint: control.oblivionone.com
-kubelet_version: latest
-kubeadm_version: latest
-kubectl_version: latest
+kubelet_version: 1.28.0-00
+kubeadm_version: 1.28.0-00
+kubectl_version: 1.28.0-00
 vm_max_map_count: 262144
 name_server: 8.8.8.8
 storage_class: kang-sc

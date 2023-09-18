@@ -42,6 +42,7 @@
 
 - name: install docker
   apt:
+    state: present
     pkg:
     - docker-ce
     - docker-ce-cli
