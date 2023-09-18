@@ -25,7 +25,7 @@
 
 
 
-- name: Render the new kubeapi file
+- name: Render the new kube API file
   template:
     src: templates/kube-apiserver.yaml.j2
     dest: /etc/kubernetes/manifests/kube-apiserver.yaml
