@@ -18,6 +18,7 @@ spec:
     - --audit-policy-file=/etc/kubernetes/audit-policy.yaml
     - --audit-log-path=/var/log/kubernetes/audit/audit.log
     - --authorization-mode=Node,RBAC
+    - --bind-address=0.0.0.0
     - --client-ca-file=/etc/kubernetes/pki/ca.crt
     - --enable-admission-plugins=NodeRestriction
     - --enable-bootstrap-token-auth=true
@@ -42,7 +43,7 @@ spec:
     - --service-cluster-ip-range=10.96.0.0/12
     - --tls-cert-file=/etc/kubernetes/pki/apiserver.crt
     - --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
-    image: registry.k8s.io/kube-apiserver:v1.25.13
+    image: registry.k8s.io/kube-apiserver:{{ upgrade_to_version }}
     imagePullPolicy: IfNotPresent
     livenessProbe:
       failureThreshold: 8
