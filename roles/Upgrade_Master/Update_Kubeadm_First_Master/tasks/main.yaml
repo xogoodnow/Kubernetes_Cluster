@@ -17,7 +17,7 @@
 
 - name: Update kubeadm version
   apt:
-    name: kubeadm=1.26.0-00
+    name: kubeadm={{ upgrade_kubeadm_version }}
     state: present
 
 
@@ -44,7 +44,7 @@
 
 - name: Verify if the upgrade is compatible with the current cluster configuration
   shell:
-    cmd: kubeadm upgrade apply v1.26.0 --dry-run
+    cmd: kubeadm upgrade apply {{ upgrade_to_version }} --dry-run
   register: upgrade_apply_result
 
 - name: Print the result of upgrade apply command
@@ -57,30 +57,6 @@
 
 - name:  Upgrade the cluster
   shell:
-    cmd: kubeadm upgrade apply v1.26.0 -y --v=5
-
-
-#apt update
-#
-#
-#
-#
-#apt-mark unhold kubeadm
-#
-# apt-get update && apt-get install -y kubeadm=1.26.x-00 && \
-#
-# apt-mark hold kubeadm
-#
-#kubeadm upgrade plan
-#kubectl drain <node-to-drain> --ignore-daemonsets
-#
-#apt-mark unhold kubelet kubectl && \
-#apt-get update && apt-get install -y kubelet=1.26.x-00 kubectl=1.26.x-00 && \
-#apt-mark hold kubelet kubectl
-#sudo systemctl daemon-reload
-#sudo systemctl restart kubelet
-#
-#kubectl uncordon <node-to-uncordon>
-
+    cmd: kubeadm upgrade apply {{ upgrade_to_version }} -y --v=5
 
 

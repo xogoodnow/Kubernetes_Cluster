@@ -39,7 +39,7 @@
 - name: Increasing the maximum number of memory map areas a process may have
   ansible.posix.sysctl:
     name: vm.max_map_count
-    value: '262144'
+    value: "{{ vm_max_map_count }}"
     state: present
     reload: true
 

@@ -59,7 +59,7 @@
 
 - name: pull haproxy latest image
   docker_image:
-    name: haproxy:latest
+    name: haproxy:{{ haproxy_version }}
     source: pull
 
 
@@ -87,7 +87,7 @@
 - name: run the haproxy container
   docker_container:
     name: haproxy
-    image: haproxy:latest
+    image: haproxy:{{ haproxy_version }}
     state: started
     restart_policy: always
     ports:

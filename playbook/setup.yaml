@@ -3,6 +3,8 @@
   hosts: all
   become: true
   tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
     - name: Setting the basis on all nodes
       include_role:
         name: "{{ item }}"

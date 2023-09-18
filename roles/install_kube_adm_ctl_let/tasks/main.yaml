@@ -45,9 +45,9 @@
     name: "{{ item }}"
     allow_downgrade: yes
   with_items:
-    - kubelet=1.25.0-00
-    - kubeadm=1.25.0-00
-    - kubectl=1.25.0-00
+    - kubelet={{ kubelet_version }}
+    - kubeadm={{ kubeadm_version }}
+    - kubectl={{ kubectl_version }}
 
 
 

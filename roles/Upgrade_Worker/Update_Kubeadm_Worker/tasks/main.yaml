@@ -17,7 +17,7 @@
 
 - name: Update kubeadm version
   apt:
-    name: kubeadm=1.26.0-00
+    name: kubeadm={{ upgrade_kubeadm_version }}
     state: present
 
 
