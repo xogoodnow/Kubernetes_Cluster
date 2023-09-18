@@ -5,6 +5,7 @@
   tasks:
     - name: Include variables
       include_vars: "all.yaml"
+
     - name: Setting the basis on all nodes
       include_role:
         name: "{{ item }}"
@@ -45,6 +46,9 @@
   become: true
   serial: 1
   tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
+
     - name: Run role on other master hosts
       include_role:
         name: $PWD/roles/join_masters
@@ -61,6 +65,9 @@
   serial: 1
   hosts: all
   tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
+
     - name: Install Calico
       include_role:
         name: $PWD/roles/CNI_Calico
@@ -90,6 +97,9 @@
   hosts: all
   tasks:
 
+    - name: Include variables
+      include_vars: "all.yaml"
+
     - name: Installing ingress controller
       include_role:
         name: $PWD/roles/Ingress
@@ -116,6 +126,9 @@
   become: true
   hosts: all
   tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
+
     - name: Configuring connection with S3bucket
       include_role:
         name: $PWD/roles/Automate_Etcd_Backup_Setup/Configure_S3cmd
@@ -134,6 +147,9 @@
   become: true
   hosts: all
   tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
+
     - name: Installing elastic
       include_role:
         name: $PWD/roles/EFK_Stack/ElasticSearch
@@ -155,6 +171,9 @@
   serial: 1
   hosts: all
   tasks:
+    - name: Include variables
+      include_vars: "all.yaml"
+
     - name: Enabling audit logging
       include_role:
         name: $PWD/roles/Audit_Logging
