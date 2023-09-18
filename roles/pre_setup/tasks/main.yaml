@@ -24,6 +24,8 @@
       - apt-transport-https
       - ca-certificates
       - curl
+      - bmon
+      - jq
       - resolvconf
       - python3-pip
     state: present
